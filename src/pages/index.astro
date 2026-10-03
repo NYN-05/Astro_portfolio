@@ -1,0 +1,374 @@
+﻿---
+import { getCollection } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import EducationItem from '../components/EducationItem.astro';
+import SkillsList from '../components/SkillsList.astro';
+import AchievementsList from '../components/AchievementsList.astro';
+import { profile, isExternal } from '../data/profile';
+
+const projects = (await getCollection('projects')).sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''));
+const experience = (await getCollection('experience')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+const education = (await getCollection('education')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+const skills = (await getCollection('skills')).sort((a, b) => a.data.category.localeCompare(b.data.category));
+const achievements = (await getCollection('achievements')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+const featuredProject = projects.find((project) => project.data.featured) ?? projects[0];
+const supportingProjects = projects.filter((project) => project !== featuredProject).slice(0, 2);
+---
+<MainLayout title="Home" description="Professional portfolio showcasing projects, skills, and experience.">
+  <section class="hero signal-grid" aria-labelledby="hero-title">
+    <div class="container container-wide hero-grid">
+      <div class="hero-copy">
+        <p class="hero-status"><span aria-hidden="true"></span> System online / available for selected opportunities</p>
+        <p class="eyebrow">Software engineer · systems builder</p>
+        <h1 id="hero-title">{profile.name}</h1>
+        <p class="hero-lede">I build dependable software for problems that matter.</p>
+        <p class="hero-focus">{profile.focus}. I turn ambiguous requirements into useful, measurable systems.</p>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary btn-arrow">Open project index</a>
+          <a href="/resume/" class="btn btn-secondary">View résumé</a>
+        </div>
+      </div>
+      <aside class="briefing" aria-label="Engineering focus">
+        <p class="briefing-label">Current briefing</p>
+        <dl>
+          <div><dt>01 / Build</dt><dd>Backend systems</dd></div>
+          <div><dt>02 / Operate</dt><dd>Cloud infrastructure</dd></div>
+          <div><dt>03 / Analyze</dt><dd>Data-intensive products</dd></div>
+        </dl>
+        <p class="briefing-footer">Scroll for selected evidence ↓</p>
+      </aside>
+    </div>
+  </section>
+
+  <section id="projects" class="section section-band" aria-labelledby="projects-title">
+    <div class="container container-wide">
+      <header class="section-heading">
+        <div>
+          <p class="section-kicker">Project index</p>
+          <h2 id="projects-title">Engineering evidence, not decorative case studies.</h2>
+        </div>
+        <p>Each entry maps a problem to an implemented system and the verified outcome it produced.</p>
+      </header>
+      <div class="project-index">
+        {featuredProject && <ProjectCard project={featuredProject} variant="diagram" />}
+        {supportingProjects.map((project, index) => (
+          <ProjectCard project={project} variant={index === 0 ? 'metrics' : 'preview'} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section section-band about-section" aria-labelledby="about-title">
+    <div class="container container-wide about-grid">
+      <div>
+        <p class="section-kicker">Operator profile</p>
+        <h2 id="about-title">Practical thinking for complex systems.</h2>
+      </div>
+      <div class="about-copy">
+        {profile.about.map((paragraph) => <p>{paragraph}</p>)}
+        <a href="#contact" class="about-link">Start a conversation →</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="section section-band" aria-labelledby="skills-title">
+    <div class="container container-wide">
+      <header class="section-heading section-heading--compact">
+        <div>
+          <p class="section-kicker">Capability matrix</p>
+          <h2 id="skills-title">Tools matter when they deliver a result.</h2>
+        </div>
+      </header>
+      <p class="skills-intro">Capabilities are organized by what they make possible, with each record tied back to existing work.</p>
+      <SkillsList skills={skills} />
+    </div>
+  </section>
+
+  <section id="experience" class="section section-band" aria-labelledby="experience-title">
+    <div class="container container-wide">
+      <header class="section-heading">
+        <div>
+          <p class="section-kicker">Engineering log</p>
+          <h2 id="experience-title">Work that improves the system around it.</h2>
+        </div>
+        <p>Selected roles, operating context, and contributions across product engineering and infrastructure.</p>
+      </header>
+      <div class="timeline">
+        {experience.map((exp) => <ExperienceItem experience={exp} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-band records-section" aria-label="Background and recognition">
+    <div class="container container-wide records-grid">
+      <div id="education">
+        <p class="section-kicker">Foundation records</p>
+        <h2>Background</h2>
+        <div class="education-list">
+          {education.map((edu) => <EducationItem education={edu} />)}
+        </div>
+      </div>
+      <div id="achievements">
+        <p class="section-kicker">Signal records</p>
+        <h2>Recognition</h2>
+        <AchievementsList achievements={achievements} />
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section-lg contact-console" aria-labelledby="contact-title">
+    <div class="container container-wide">
+      <p class="section-kicker">Open channel</p>
+      <div class="contact-grid">
+        <div>
+          <h2 id="contact-title">Let's build something useful.</h2>
+          <p>For engineering opportunities, collaborations, or technical conversations, reach out.</p>
+        </div>
+        <div class="contact-links">
+          {profile.contact.map((item, index) => (
+            <a href={item.href} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined}>
+              <span>0{index + 1} / {item.label}</span>
+              <strong>{item.value}</strong>
+              <i aria-hidden="true">↗</i>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .hero {
+      min-height: min(47rem, calc(100vh - 4.5rem));
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: color-mix(in srgb, var(--color-primary) 3%, transparent);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr);
+      gap: clamp(var(--space-10), 8vw, var(--space-20));
+      align-items: end;
+      min-height: inherit;
+      padding-top: clamp(var(--space-16), 11vw, 9rem);
+      padding-bottom: var(--space-12);
+    }
+    .hero-status {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+      margin-bottom: var(--space-8);
+      color: var(--color-text-muted);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero-status span {
+      width: .55rem;
+      height: .55rem;
+      background: var(--color-success);
+      border-radius: var(--radius-full);
+    }
+    .hero h1 {
+      max-width: 24ch;
+      margin-bottom: var(--space-5);
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: var(--line-height-tight);
+    }
+    .hero-lede {
+      max-width: 18ch;
+      margin-bottom: var(--space-4);
+      font-family: var(--font-family-serif);
+      font-size: clamp(1.75rem, 3.4vw, 3rem);
+      line-height: 1.2;
+      color: var(--color-text-secondary);
+    }
+    .hero-focus {
+      max-width: 53ch;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-relaxed);
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-3);
+      margin-top: var(--space-8);
+    }
+    .briefing {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-6);
+      border: 1px solid var(--color-border);
+      background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    }
+    .briefing-label, .briefing dt, .briefing-footer {
+      margin: 0;
+      color: var(--color-accent);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .briefing dl {
+      display: grid;
+      gap: var(--space-5);
+      margin: auto 0;
+    }
+    .briefing dl div {
+      padding-top: var(--space-3);
+      border-top: 1px solid var(--color-border);
+    }
+    .briefing dd {
+      margin: var(--space-2) 0 0;
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-text);
+    }
+    .briefing-footer {
+      color: var(--color-text-subtle);
+    }
+    .about-grid, .records-grid, .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      gap: clamp(var(--space-8), 8vw, var(--space-20));
+    }
+    .about-grid h2 {
+      max-width: 11ch;
+      font-size: clamp(2.25rem, 4vw, 4rem);
+    }
+    .about-copy {
+      max-width: 52rem;
+      padding-left: var(--space-6);
+      border-left: 2px solid var(--color-accent);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-lg);
+      line-height: var(--line-height-relaxed);
+    }
+    .about-link {
+      display: inline-block;
+      margin-top: var(--space-6);
+      color: var(--color-text);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .about-link:hover {
+      color: var(--color-accent);
+    }
+    .skills-intro {
+      max-width: 35ch;
+      margin: 0 0 var(--space-8);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-lg);
+    }
+    .records-grid > div {
+      min-width: 0;
+    }
+    .records-grid h2 {
+      font-size: clamp(2rem, 3.2vw, 3rem);
+    }
+    .contact-console {
+      border-top: 1px solid var(--color-border);
+      background: color-mix(in srgb, var(--color-primary) 20%, var(--color-background));
+      color: var(--color-primary-foreground);
+    }
+    .contact-console .section-kicker, .contact-console h2 { color: inherit; }
+    .contact-console .section-kicker::before { background: var(--chart-4); }
+    .contact-console h2 {
+      max-width: 11ch;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+    }
+    .contact-console p {
+      max-width: 34ch;
+      margin: 0;
+      color: color-mix(in srgb, var(--color-primary-foreground) 75%, transparent);
+      font-size: var(--font-size-lg);
+    }
+    .contact-links {
+      border-top: 1px solid color-mix(in srgb, var(--color-primary-foreground) 35%, transparent);
+    }
+    .contact-links a {
+      display: grid;
+      grid-template-columns: minmax(7rem, .5fr) minmax(0, 1fr) auto;
+      gap: var(--space-4);
+      align-items: center;
+      padding: var(--space-5) 0;
+      border-bottom: 1px solid color-mix(in srgb, var(--color-primary-foreground) 35%, transparent);
+      color: inherit;
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    .contact-links a:hover {
+      color: var(--chart-4);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) .contact-console {
+        color: var(--color-text);
+      }
+      :root:not([data-theme="dark"]) .contact-console p {
+        color: var(--color-text-secondary);
+      }
+      :root:not([data-theme="dark"]) .contact-links {
+        border-top: 1px solid var(--color-border);
+      }
+      :root:not([data-theme="dark"]) .contact-links a {
+        border-bottom: 1px solid var(--color-border);
+      }
+      :root:not([data-theme="dark"]) .contact-links a:hover {
+        color: var(--color-accent);
+      }
+    }
+    :global(:root[data-theme="light"]) .contact-console {
+      color: var(--color-text);
+    }
+    :global(:root[data-theme="light"]) .contact-console p {
+      color: var(--color-text-secondary);
+    }
+    :global(:root[data-theme="light"]) .contact-links {
+      border-top: 1px solid var(--color-border);
+    }
+    :global(:root[data-theme="light"]) .contact-links a {
+      border-bottom: 1px solid var(--color-border);
+    }
+    :global(:root[data-theme="light"]) .contact-links a:hover {
+      color: var(--color-accent);
+    }
+    .contact-links span {
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .contact-links strong {
+      overflow-wrap: anywhere;
+    }
+    .contact-links i {
+      font-style: normal;
+    }
+    @media (max-width: 720px) {
+      .hero { min-height: auto; }
+      .hero-grid, .about-grid, .records-grid, .contact-grid { grid-template-columns: 1fr; }
+      .hero-grid { padding-top: var(--space-12); }
+      .hero h1 { font-size: clamp(3.5rem, 18vw, 5.5rem); }
+      .hero-actions .btn { width: 100%; }
+      .briefing { min-height: 22rem; }
+      .about-copy { padding-left: var(--space-4); }
+      .contact-links a { grid-template-columns: 1fr auto; }
+      .contact-links span { grid-column: 1 / -1; }
+    }
+  </style>
+</MainLayout>

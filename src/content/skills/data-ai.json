@@ -1,0 +1,12 @@
+{
+  "category": "Data & AI/ML",
+  "summary": "Ingest event streams at speed and turn raw events into analytical answers.",
+  "evidence": "Kafka ingestion with ClickHouse analytics held p99 latency under 200 ms at 500k events per second.",
+  "items": [
+    "ClickHouse / Analytics DBs",
+    "Apache Kafka / Event Streaming",
+    "Pandas / NumPy / Data Analysis",
+    "scikit-learn / ML Fundamentals",
+    "Vector Databases / Embeddings"
+  ]
+}

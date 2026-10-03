@@ -1,0 +1,54 @@
+---
+import { formatDate } from '../utils/format';
+
+interface Props {
+  experience: any;
+}
+
+const { experience } = Astro.props;
+const { data } = experience;
+---
+
+<article class="timeline-item">
+  <header>
+    <h3>{data.role}</h3>
+    <p class="timeline-meta">
+      {data.company}
+      {data.location && <span> · {data.location}</span>}
+      <span> · {formatDate(data.startDate)} – {data.endDate ? formatDate(data.endDate) : 'Present'}</span>
+    </p>
+  </header>
+  {data.description && <p class="timeline-desc">{data.description}</p>}
+  <ul>
+    {data.achievements.map((achievement: string) => <li>{achievement}</li>)}
+  </ul>
+  {data.technologies && data.technologies.length > 0 && (
+    <div class="timeline-technologies">
+      {data.technologies.map((tech: string) => <span class="tech-tag">{tech}</span>)}
+    </div>
+  )}
+</article>
+
+<style>
+  .timeline-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .tech-tag {
+    font-size: var(--font-size-xs);
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-bg-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-muted);
+    transition: border-color var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+  }
+  .tech-tag:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-bg);
+  }
+</style>

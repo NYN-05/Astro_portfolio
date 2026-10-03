@@ -1,0 +1,44 @@
+﻿---
+interface Props { project: any; featured?: boolean; variant?: 'featured' | 'secondary' | 'diagram' | 'metrics' | 'preview'; }
+const { project, featured: featuredOverride, variant } = Astro.props;
+const { data } = project;
+const isFeatured = variant ? variant === 'featured' : (featuredOverride ?? data.featured);
+const status = data.status.replace('-', ' ');
+const year = data.startDate?.slice(0, 4) ?? '—';
+const result = data.results || data.contributions?.[0] || data.description;
+const index = isFeatured ? '01' : year;
+const projectId = `project-${data.title.replace(/\s+/g, '-')}`;
+
+let cardVariant = 'secondary';
+if (variant === 'diagram' || (isFeatured && data.title.includes('Pipeline'))) cardVariant = 'diagram';
+else if (variant === 'metrics' || data.title.includes('Task Manager')) cardVariant = 'metrics';
+else if (variant === 'preview' || data.title.includes('Portfolio')) cardVariant = 'preview';
+else if (isFeatured) cardVariant = 'featured';
+---
+<article class={`project-card project-card--${cardVariant}`} aria-labelledby={projectId}>
+  <div class="project-card__diagram signal-grid" aria-label={`${data.title} system diagram`}>
+    <div class="project-card__diagram-meta"><span>{index}</span><span>{status}</span></div>
+    <p class="project-card__diagram-label">{data.technologies.slice(0, 3).join(' / ')}</p>
+  </div>
+  <div class="project-card__content">
+    <header class="project-card__header">
+      <h3 id={projectId} class="project-card__title">{data.title}</h3>
+      <p class="project-card__status">{year}</p>
+    </header>
+    <p class="project-card__description">{data.problem || data.description}</p>
+    <div class="project-card__result">
+      <strong>Verified outcome</strong>
+      <span>{result}</span>
+    </div>
+    <div>
+      <span class="project-card__tech-label">System stack</span>
+      <div class="project-card__tech" aria-label="Technologies">
+        {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="project-card__tech-tag">{technology}</span>)}
+      </div>
+    </div>
+    <footer class="project-card__actions">
+      {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} on GitHub`}>Source</a>}
+      {data.demoUrl && <a href={data.demoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} demo`}>Live system</a>}
+    </footer>
+  </div>
+</article>

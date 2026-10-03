@@ -1,0 +1,68 @@
+﻿---
+import { getCollection } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import ExperienceItem from '../components/ExperienceItem.astro';
+import EducationItem from '../components/EducationItem.astro';
+import SkillsList from '../components/SkillsList.astro';
+import { profile } from '../data/profile';
+
+const projects = await getCollection('projects');
+const experience = (await getCollection('experience')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+const education = (await getCollection('education')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+const skills = (await getCollection('skills')).sort((a, b) => a.data.category.localeCompare(b.data.category));
+---
+
+<MainLayout title="Resume" description="Download or view the resume.">
+  <section class="resume-section" aria-labelledby="resume-title">
+    <div class="container container-wide">
+      <header class="resume-header">
+        <div>
+          <p class="section-kicker">Career system record</p>
+          <h1 id="resume-title">Résumé</h1>
+        </div>
+        <div>
+          <p>A focused overview of experience, capabilities, and selected engineering work.</p>
+          <a href="/resume.pdf" class="btn btn-primary" download>Download PDF ↓</a>
+        </div>
+      </header>
+      <div class="resume-content">
+        <section>
+          <h2>Professional summary</h2>
+          {profile.about.map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+        <section>
+          <h2>Capability matrix</h2>
+          <SkillsList skills={skills} />
+        </section>
+        <section>
+          <h2>Engineering log</h2>
+          <div class="timeline">{experience.map((exp) => <ExperienceItem experience={exp} />)}</div>
+        </section>
+        <section>
+          <h2>Foundation records</h2>
+          <div class="education-list">{education.map((edu) => <EducationItem education={edu} />)}</div>
+        </section>
+        <section>
+          <h2>Project index</h2>
+          <div class="project-index">
+            {projects.map((project, index) => (
+              <ProjectCard project={project} variant={index === 0 ? 'diagram' : index === 1 ? 'metrics' : 'preview'} />
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+  <style>
+    .resume-section { padding: var(--space-section-lg) 0; }
+    .resume-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(17rem, .65fr); gap: var(--space-10); align-items: end; padding-bottom: var(--space-10); border-bottom: 1px solid var(--color-border); }
+    .resume-header h1 { margin: 0; font-size: clamp(3rem, 7vw, 6rem); }
+    .resume-header p { max-width: 33ch; color: var(--color-text-muted); font-size: var(--font-size-lg); line-height: var(--line-height-relaxed); }
+    .resume-content { max-width: var(--content-width-wide); }
+    .resume-content > section { padding: var(--space-group-lg) 0; border-bottom: 1px solid var(--color-border); }
+    .resume-content h2 { font-size: clamp(1.75rem, 3vw, 2.75rem); }
+    .resume-content > section > p { max-width: 70ch; color: var(--color-text-secondary); line-height: var(--line-height-relaxed); }
+    @media (max-width: 720px) { .resume-header { grid-template-columns: 1fr; gap: var(--space-5); } }
+  </style>
+</MainLayout>

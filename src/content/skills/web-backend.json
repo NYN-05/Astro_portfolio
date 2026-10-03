@@ -1,0 +1,13 @@
+{
+  "category": "Web & Backend",
+  "summary": "Design APIs, data models, and front-ends that hold up under real users.",
+  "evidence": "The Task Manager API shipped JWT auth, role-based access, and WebSockets at 85%+ test coverage; this site renders its UI with zero client-side JavaScript.",
+  "items": [
+    "Node.js / Astro / React",
+    "REST / GraphQL APIs",
+    "PostgreSQL / MySQL",
+    "Redis / Caching",
+    "Docker / Kubernetes",
+    "gRPC / Protocol Buffers"
+  ]
+}
