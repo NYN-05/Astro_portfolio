@@ -43,8 +43,8 @@ Thumbs.db
 
 # VS Code
 .vscode/*
-!.vscode/extensions.json
-!.vscode/launch.json
+.vscode/extensions.json
+.vscode/launch.json
 
 # Editor temp files
 *.swp
