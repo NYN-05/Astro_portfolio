@@ -9,6 +9,12 @@ npm install        # install dependencies
 npm run dev        # local dev server
 npm run build      # production build -> dist/
 npm run preview    # serve the built dist/ locally
+npm run check      # Astro type checking (astro check)
+npm run lint       # ESLint (TypeScript, Astro, JSX-a11y)
+npm run lint:fix   # auto-fix ESLint issues
+npm run format     # Prettier format check
+npm run format:fix # auto-fix formatting
+npm run ci         # run all quality gates (check + lint + format)
 ```
 
 ## Structure
@@ -49,3 +55,48 @@ The build output is a plain static site in `dist/` — any static host works.
 - Requirements: `Docs/PRD.md`
 - Phases: `Docs/tech_phases.md`
 - Development log (mandatory): `Docs/CHANGES.md`
+
+## Quality Gates
+
+This project enforces code quality via automated checks:
+
+| Tool              | Purpose                                   | Config                     |
+| ----------------- | ----------------------------------------- | -------------------------- |
+| `astro check`     | TypeScript diagnostics for `.astro` files | `astro.config.mjs`         |
+| ESLint 10         | Linting (TS, Astro, accessibility)        | `eslint.config.js`         |
+| Prettier 3        | Code formatting                           | `prettier.config.json`     |
+| GitHub Actions CI | Runs all gates on push/PR                 | `.github/workflows/ci.yml` |
+
+Run locally before committing:
+
+```sh
+npm run ci  # runs check + lint + format
+```
+
+Auto-fix common issues:
+
+```sh
+npm run lint:fix   # fix ESLint issues
+npm run format:fix # fix formatting
+```
+
+### CI Pipeline
+
+The `.github/workflows/ci.yml` runs on every push and PR to `main`:
+
+1. Install dependencies (`npm ci --legacy-peer-deps`)
+2. Type check (`npm run check`)
+3. Lint (`npm run lint`)
+4. Format check (`npm run format`)
+5. Build (`npm run build`)
+
+PRs also upload build artifacts for preview.
+
+### Security Hardening
+
+- CSP without `'unsafe-inline'` (styles extracted to external CSS)
+- No wildcard CORS headers
+- Security headers on all responses (including `/resume.pdf`)
+- `inlineStylesheets: 'never'` in `astro.config.mjs`
+- Astro telemetry disabled
+- Dev server host validation enabled
