@@ -5,11 +5,14 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
-  site: 'https://portfolio.example.com',
+  site: 'https://jhashanknayanportfolio.netlify.app/',
   compressHTML: true,
   integrations: [sitemap()],
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'never',
+  },
+  security: {
+    checkOrigin: true,
   },
   image: {
     service: {
