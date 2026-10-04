@@ -58,6 +58,7 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
 ## 2026-10-03 — Refined portfolio UI for readability, rhythm, and visual precision
 
 ### Refactored
+
 - Introduced semantic design tokens (`--color-surface`, `--color-surface-elevated`, `--color-text-secondary`, `--color-text-subtle`, `--color-border-muted`, `--color-focus-ring`) and tuned both light/dark themes independently for sufficient contrast. Reason: the previous token set lacked clear semantic hierarchy, making it difficult to strengthen secondary text without affecting primary content.
 - Added a three-level spacing system (`--space-section-*` for major section gaps, `--space-group-*` for content groups, `--space-element` for related elements) replacing ad-hoc `clamp()` values. Reason: uneven visual density between sparse and dense sections; three explicit levels create intentional rhythm.
 - Refined project cards into three distinct variants (`diagram`, `metrics`, `preview`) while preserving the shared card system. Reason: visual repetition across all projects made the portfolio feel templated; each variant now emphasizes a different content type (system diagram, verified outcomes, interface preview).
@@ -69,12 +70,14 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
 - Preserved all core identity: warm off-white/charcoal backgrounds, restrained red accent, oversized serif/sans contrast, thin horizontal rules, compact metadata, asymmetric layouts, flat surfaces. No gradients, glassmorphism, neon effects, or excessive rounding introduced.
 
 ### Fixed
+
 - Problem: project card featured variant had invisible text (white on 5% tint background).
 - Root Cause: `.project-card.featured` set text to `--color-bg` while background was only a 5% tint.
 - Solution: removed the problematic featured text color override; featured card now uses standard text colors with variant-specific layout only.
 - Verification: built output shows readable text in both themes for all project variants.
 
 ### Verification
+
 - `npm run build` passes; generates `/`, `/resume/`, `/404.html` with zero errors.
 - All three pages render with exactly one `h1`, proper heading hierarchy, and no horizontal overflow at 320px.
 - Light mode: secondary text contrast improved (measured via computed styles); dark mode: muted text now #a8a29e (was #d6d3d1), borders #44403c.
@@ -86,25 +89,87 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
 ## 2026-10-03 — Rebuilt portfolio as a warm signal dashboard
 
 ### Changed
+
 - Reworked the shared shell, homepage, résumé, and 404 route into a restrained signal-dashboard system: compact command-bar navigation, content-led briefing panels, flat record layouts, structured project diagrams, and a high-contrast contact console. Reason: replace the previous repeated editorial-card treatment with a more specific interface for engineering evidence.
 - Replaced the prior blue/slate theme with the supplied warm cream, oxblood, amber, and stone token palette. The project’s existing `data-theme="dark"` and system-preference paths now use the matching dark palette; the supplied Tailwind-only `@theme inline` block was intentionally not added because this is a vanilla Astro/CSS project.
 - Replaced rendered project thumbnails with CSS system diagrams derived from each record’s status, year, technologies, and results. Reason: the former `picsum.photos` images were generic placeholders and did not substantiate project work.
 - Made explicit page-level project variants override the content `featured` flag so the homepage retains one primary project and two supporting entries even though all current records are marked featured.
 
 ### Important Decisions
+
 - Preserved existing collection schemas, placeholder identity/contact data, routes, external links, and local image files. The redesign is visual only; no unverified professional content or screenshots were invented.
 - Applied the attached visual-polish brief only where relevant to the portfolio. Its face-detection workflow requirements are unrelated and were not added.
 
 ### Verification
+
 - `npm run build` passed on 2026-10-03 and generated `/`, `/resume/`, and `/404.html`.
 - Built HTML confirms exactly one homepage featured project and two supporting projects; every emitted page has exactly one `h1`.
 - Built output contains no `picsum.photos` or `hero-workspace.webp` reference, and no emitted `.js` files. The existing theme toggle remains inline progressive enhancement.
 - Static verification only: visual browser screenshots were not available because the local desktop browser-inspection helper failed to initialize in this environment.
 
 ---
+
+## 2026-10-04 — Security hardening and bug fixes from audit
+
+### Fixed
+
+- **CSP unsafe-inline removed**: Set `inlineStylesheets: 'never'` in `astro.config.mjs`; removed `'unsafe-inline'` from `style-src` in CSP headers (`netlify.toml`, `public/_headers`). Reason: eliminates style-based XSS vector; all styles now served as external CSS files.
+- **Overly permissive CORS removed**: Removed all `Access-Control-Allow-Origin: *` and `Access-Control-Allow-Headers: *` headers from `netlify.toml` and `public/_headers`. Reason: static public content doesn't need CORS; wildcard headers are poor security hygiene.
+- **Missing security headers on PDF**: Added full security header suite (X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, CSP) to `/resume.pdf` route in both config files. Reason: defense in depth; prevents PDF embedding in iframes.
+- **CSS syntax errors**: Removed trailing periods from dark mode CSS custom property values in `src/styles/variables.css:161-166` (`#faf7f5.` → `#faf7f5`, etc.). Reason: invalid CSS values were being ignored by browsers.
+- **formatDate input validation**: Added `isNaN` check in `src/utils/format.ts` to handle invalid date strings gracefully. Reason: prevents `RangeError` at build time if content frontmatter has malformed dates.
+- **Vite dev server host validation**: Changed `allowedHosts: true` to `allowedHosts: false` in `vite.config.ts`. Reason: prevents DNS rebinding attacks in development.
+- **Astro telemetry disabled**: Ran `astro telemetry disable`. Reason: privacy; stops anonymous usage data collection.
+
+### Removed
+
+- **Unused large asset**: Deleted `src/assets/background_hero.png` (1.5 MB). Reason: file was not referenced anywhere in codebase; wasted bandwidth and build time.
+
+### Configuration
+
+- **Placeholder domain notice**: Added comment in `public/robots.txt` reminding to replace `portfolio.example.com` with production domain before deploy. Reason: canonical URLs, OG tags, and sitemap require correct production domain.
+- **Astro config security**: Added `security.checkOrigin: true` in `astro.config.mjs`. Reason: enables origin checking for server endpoints (defense in depth for future dynamic features).
+
+### Verification
+
+- `npm run build` passes; generates `/`, `/resume/`, `/404.html` with zero errors.
+- Built `_headers` confirms: no CORS wildcards, CSP uses `style-src 'self'` (no `'unsafe-inline'`), security headers present on `/resume.pdf`.
+- Built `robots.txt` contains production domain reminder.
+- All three pages render with exactly one `h1`, proper heading hierarchy, no horizontal overflow at 320px.
+- Theme toggle persists preference and respects system preference.
+- No inline styles in generated HTML (verified: all CSS in `/_astro/*.css` files).
+
+---
+
+## 2026-10-04 — Quality gates: ESLint, Prettier, Astro check, GitHub Actions CI
+
+### Added
+
+- **ESLint 10** with flat config (`eslint.config.js`): TypeScript support via `@typescript-eslint`, Astro support via `eslint-plugin-astro`, accessibility rules via `eslint-plugin-jsx-a11y`. Reason: catch code issues early, enforce consistent style.
+- **Prettier 3** with `prettier-plugin-astro` (`prettier.config.json`): unified formatting for `.astro`, `.ts`, `.js`, `.css`, `.md`. Reason: eliminate formatting debates, ensure consistent code style.
+- **Astro check** via `@astrojs/check`: TypeScript diagnostics for all `.astro` files. Reason: catch type errors at build time before they reach production.
+- **GitHub Actions CI workflow** (`.github/workflows/ci.yml`): runs on push/PR to main; executes `npm run check`, `npm run lint`, `npm run format`, and `npm run build`. Reason: automated quality gate prevents broken code from merging.
+- **NPM scripts** in `package.json`: `lint`, `lint:fix`, `format`, `format:fix`, `check`, `ci`. Reason: single-command local verification matching CI.
+
+### Fixed
+
+- **Accessibility**: Removed redundant `role="list"` from `<ol>` in `AchievementsList.astro` and `<ul>` in `MainLayout.astro` (fixes `jsx-a11y/no-redundant-roles`).
+- **Vite config**: Changed `allowedHosts: false` to `allowedHosts: []` to satisfy TypeScript types.
+
+### Verification
+
+- `npm run check`: 0 errors, 0 warnings across 17 files.
+- `npm run lint`: 0 errors, 0 warnings (ESLint 10 flat config).
+- `npm run format`: "All matched files use Prettier code style!" (22 files fixed).
+- `npm run build`: 3 pages generated successfully (`/`, `/resume/`, `/404.html`).
+- `npm run ci`: full pipeline passes locally.
+
+---
+
 ## 2026-10-02 â€” Strengthened homepage visual hierarchy and project storytelling
 
 ### Changed
+
 - Reworked the homepage composition so the Work band has a distinct surface, tighter spacing,
   and a stronger visual anchor instead of repeating the same section treatment throughout.
 - Added a restrained hero â€œCurrent focusâ€ panel using existing profile data, and changed the
@@ -114,6 +179,7 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
   without adding animation, frameworks, or decorative assets.
 
 ### Fixed
+
 - Problem: project cards rendered empty rectangles or a â€œCase study visualâ€ placeholder when
   verified project imagery was unavailable.
 - Root Cause: the component reserved a large visual slot independently of the content model.
@@ -124,6 +190,7 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
   the emitted homepage, and no horizontal overflow at 320px.
 
 ### Verification
+
 - `npm run build` passed; Astro generated all 3 static pages.
 - Emitted `dist/index.html` measured 30,654 bytes; `Case study visual` was absent and the new CTA
   was present.
@@ -133,4 +200,71 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
 
 ---
 
+## 2026-10-04 — OWASP Top 10:2025 Security Hardening
 
+### Fixed
+
+- **A02: Security Misconfiguration** — Enhanced security headers across all responses:
+  - Added `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` for COOP/COEP isolation
+  - Added `X-Permitted-Cross-Domain-Policies: none` to prevent Flash/PDF cross-domain policy abuse
+  - Added `upgrade-insecure-requests` directive to CSP for HSTS-like behavior
+  - Added `Cross-Origin-Resource-Policy: same-origin` for `/_astro/*`, `/resume.pdf`, `/images/*` to prevent speculative execution side-channel attacks
+  - Applied consistent headers to all routes including `/resume.pdf` and static assets
+
+- **A05: Injection** — Strengthened client-side theme toggle against localStorage poisoning:
+  - Added `VALID_THEMES` allowlist in `MainLayout.astro` theme toggle script
+  - `getTheme()` now validates `root.dataset.theme` against `['light', 'dark']` before use
+  - Prevents XSS via malicious `localStorage.setItem('portfolio-theme', '<script>...')`
+
+- **A08: Software/Data Integrity Failures** — Added build output verification in CI:
+  - CI job now verifies critical build artifacts exist (`index.html`, `resume/index.html`, `404.html`, `_headers`, `robots.txt`)
+  - `security-scan` job runs `npm audit` with high/critical threshold enforcement
+  - Uploads full npm audit report as artifact for review
+
+- **A09: Security Logging & Alerting Failures** — Added responsible disclosure mechanism:
+  - Created `public/.well-known/security.txt` with contact, encryption, policy, and canonical URLs
+  - Configures security researcher contact per RFC 9116
+
+- **A10: Mishandling of Exceptional Conditions** — Improved fail-closed behavior:
+  - Theme toggle now validates all localStorage values before applying (defaults to system preference)
+  - CI pipeline fails on high/critical vulnerabilities (`npm audit --audit-level=high`)
+
+### Added
+
+- **A03: Supply Chain** — Dependabot configuration (`.github/dependabot.yml`):
+  - Weekly automated dependency updates on Mondays
+  - Groups dev/production dependencies with separate update policies
+  - Ignores major version updates to prevent breaking changes
+  - Labels PRs for easy triage
+
+- **A03: Supply Chain** — Enhanced CI pipeline (`.github/workflows/ci.yml`):
+  - Added `npm audit --audit-level=high --omit=dev` to fail on high/critical vulns
+  - Added dedicated `security-scan` job with full audit report artifact
+  - Added scheduled weekly run for proactive vulnerability detection
+  - Added build artifact integrity verification step
+  - Added `security-events: write` permission for SARIF uploads (future)
+
+- **A02: Security Misconfiguration** — Netlify and `_headers` alignment:
+  - Both configs now identical with enhanced headers
+  - Added COOP, COEP, CORP, X-Permitted-Cross-Domain-Policies
+  - Added `upgrade-insecure-requests` CSP directive
+
+### Configuration
+
+- `astro.config.mjs`: Verified `inlineStylesheets: 'never'` and `security.checkOrigin: true` remain
+- `vite.config.ts`: Verified `allowedHosts: []` (deny all) for dev server
+- `src/layouts/MainLayout.astro`: Theme toggle validation hardened
+- `public/_headers` / `netlify.toml`: Enhanced security headers
+
+### Verification
+
+- `npm run check`: 0 errors, 0 warnings across 17 files
+- `npm run lint`: 0 errors, 0 warnings (ESLint 10 flat config)
+- `npm run format`: All matched files use Prettier code style
+- `npm run build`: 3 pages generated successfully (`/`, `/resume/`, `/404.html`)
+- Built `dist/_headers` confirms all enhanced headers present
+- Built `dist/.well-known/security.txt` present and accessible
+- Built `dist/index.html` contains `VALID_THEMES` allowlist validation
+- CI pipeline structure validated locally
+
+---
