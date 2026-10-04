@@ -14,7 +14,7 @@ Not a nicety; it is a stated project requirement.
    the top of the log, grouped under Added / Changed / Fixed / Removed / Refactored /
    Configuration / Security / Verification / Important Decisions.
 
-Append only, never rewrite history. Record the change *and* the reason. Bugs:
+Append only, never rewrite history. Record the change _and_ the reason. Bugs:
 `Problem → Root Cause → Solution → Verification`. Never claim a verification you did not run.
 Skip the entry only if the task produced no meaningful change.
 
