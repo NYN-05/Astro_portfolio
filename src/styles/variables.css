@@ -158,12 +158,12 @@
   --muted-foreground: #a8a29e;
   --accent-foreground: #fef3c7;
   --popover-foreground: #f5f5f4;
-  --primary-foreground: #faf7f5.
-  --sidebar-foreground: #f5f5f4.
-  --secondary-foreground: #fef3c7.
-  --destructive-foreground: #ffffff.
-  --sidebar-accent-foreground: #fef3c7.
-  --sidebar-primary-foreground: #faf7f5.
+  --primary-foreground: #faf7f5;
+  --sidebar-foreground: #f5f5f4;
+  --secondary-foreground: #fef3c7;
+  --destructive-foreground: #ffffff;
+  --sidebar-accent-foreground: #fef3c7;
+  --sidebar-primary-foreground: #faf7f5;
 }
 
 @media (prefers-color-scheme: dark) {
