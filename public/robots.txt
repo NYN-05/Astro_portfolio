@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://portfolio.example.com/sitemap-index.xml
+# REPLACE WITH PRODUCTION DOMAIN BEFORE DEPLOY
+Sitemap: https://jhashanknayanportfolio.netlify.app/sitemap-index.xml
