@@ -1,26 +1,31 @@
 ---
-title: "Real-time Data Pipeline"
-description: "High-throughput data processing pipeline for ingesting, transforming, and analyzing streaming event data."
-problem: "Processing millions of events per day with sub-second latency requirements for analytics dashboards."
-approach: "Designed a Go-based pipeline using Kafka for ingestion, Redis for caching, and ClickHouse for analytical queries. Implemented exactly-once semantics with idempotent consumers."
+title: "Preventive Movement Intelligence – BIRAC Idea Prototype"
+description: "A real-time Android-to-FastAPI posture analysis system using MoveNet and MediaPipe for pose inference, movement scoring, and risk analysis."
+problem: "Real-time exercise assessment requires automated posture analysis, movement-stage detection, form evaluation, and corrective feedback."
+approach: "Developed an Android-to-FastAPI system using MoveNet and MediaPipe for pose inference and implemented exercise-aware assessment for squats, push-ups, and sit-ups."
 technologies:
-  - Go
-  - Apache Kafka
-  - Redis
-  - ClickHouse
-  - Prometheus
-  - Grafana
-  - Kubernetes
+  - Python
+  - FastAPI
+  - MoveNet
+  - MediaPipe
+  - TensorFlow Lite
+  - Kotlin
+  - Android
 contributions:
-  - Built custom Kafka consumer group with automatic rebalancing
-  - Implemented schema registry integration for Avro serialization
-  - Designed horizontal scaling strategy handling 10x traffic spikes
-results: "Achieved 99.9th percentile latency under 200ms at 500k events/second."
-repoUrl: "https://github.com/example/data-pipeline"
+  - "Developed the Android-to-FastAPI architecture"
+  - "Implemented pose inference using MoveNet and MediaPipe"
+  - "Implemented movement scoring"
+  - "Implemented risk analysis"
+  - "Added exercise-aware assessment"
+  - "Implemented form scoring"
+  - "Implemented movement-stage detection"
+  - "Implemented corrective feedback"
+results: "The resume does not provide quantitative performance metrics."
+repoUrl: "https://github.com/NYN-05/BIRAC-IDEA-COMPLETE"
 status: "completed"
-featured: true
-startDate: "2022-01-15"
-endDate: "2022-08-30"
-image: "https://picsum.photos/seed/data-pipeline/800/450.jpg"
-imageAlt: "Data pipeline architecture diagram showing Kafka, Redis, and ClickHouse components"
+featured: false
+startDate: "2023-01"
+endDate: "2023-06"
+image: "/images/preventive-movement.svg"
+imageAlt: "Preventive Movement Intelligence system showing real-time posture analysis on Android"
 ---

@@ -1,12 +1,16 @@
 {
-  "category": "Data & AI/ML",
-  "summary": "Ingest event streams at speed and turn raw events into analytical answers.",
-  "evidence": "Kafka ingestion with ClickHouse analytics held p99 latency under 200 ms at 500k events per second.",
+  "category": "AI/ML & Computer Vision",
+  "summary": "Practical experience developing and integrating machine-learning and computer-vision systems, particularly for image, video, physiological-signal, and pose-analysis applications.",
+  "evidence": "Projects include deepfake detection, image authenticity verification, rPPG analysis, CNN/ViT inference, OCR, pose estimation, and real-time movement analysis.",
   "items": [
-    "ClickHouse / Analytics DBs",
-    "Apache Kafka / Event Streaming",
-    "Pandas / NumPy / Data Analysis",
-    "scikit-learn / ML Fundamentals",
-    "Vector Databases / Embeddings"
+    "PyTorch",
+    "Scikit-learn",
+    "OpenCV",
+    "MediaPipe",
+    "MoveNet",
+    "TensorFlow Lite",
+    "CNNs",
+    "Vision Transformers",
+    "OCR"
   ]
 }

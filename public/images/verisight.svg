@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <rect width="800" height="450" fill="#1a1a2e"/>
+  <text x="400" y="200" font-family="system-ui, sans-serif" font-size="24" fill="#64ffda" text-anchor="middle" font-weight="600">VeriSight V1</text>
+  <text x="400" y="240" font-family="system-ui, sans-serif" font-size="14" fill="#8892b0" text-anchor="middle">AI-Powered Image Authenticity Platform</text>
+  <rect x="350" y="260" width="100" height="4" fill="#0a192f" rx="2"/>
+  <rect x="350" y="260" width="65" height="4" fill="#64ffda" rx="2"/>
+  <text x="400" y="290" font-family="system-ui, sans-serif" font-size="12" fill="#8892b0" text-anchor="middle">CNN + ViT + OCR</text>
+</svg>

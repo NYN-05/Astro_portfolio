@@ -1,27 +1,29 @@
 ---
-title: "Task Manager API"
-description: "A RESTful API for task management with user authentication, project organization, and real-time notifications."
-problem: "Teams needed a lightweight, self-hosted task management solution with granular permissions and real-time updates."
-approach: "Built a Node.js/TypeScript API with PostgreSQL, implementing JWT authentication, role-based access control, and WebSocket connections for live updates."
+title: "Deepfake Detection Pipeline for KYC: rPPG + Hybrid Quantum-Classical ML"
+description: "An end-to-end low-resolution KYC video deepfake detection pipeline combining rPPG-based physiological analysis with hybrid quantum-classical machine learning inference."
+problem: "Detecting deepfakes in low-resolution KYC videos requires reliable signals beyond conventional visual analysis, particularly when video quality limits the effectiveness of purely appearance-based detection."
+approach: "Built a pipeline incorporating frame processing, rPPG-based physiological analysis, POS/CHROM signal processing, physiological feature extraction, and hybrid quantum-classical ML inference, with the resulting inference workflow integrated into a React application."
 technologies:
-  - TypeScript
-  - Node.js
-  - Express
-  - PostgreSQL
-  - Prisma ORM
-  - WebSockets
-  - Docker
+  - Python
+  - PyTorch
+  - PennyLane
+  - OpenCV
+  - MediaPipe
+  - React
+  - scikit-learn
 contributions:
-  - Designed database schema with polymorphic associations for flexible task hierarchies
-  - Implemented optimistic locking for concurrent task updates
-  - Added comprehensive test coverage (85%+)
-results: "Reduced task management overhead by 40% for beta users; deployed to 3 production environments."
-repoUrl: "https://github.com/example/task-manager-api"
-demoUrl: "https://task-manager.example.com"
-status: "completed"
+  - "Built an end-to-end low-resolution KYC video detection pipeline"
+  - "Implemented rPPG-based physiological analysis"
+  - "Engineered POS/CHROM signal processing"
+  - "Extracted 23 physiological features for temporal liveness and deepfake analysis"
+  - "Developed and evaluated the hybrid quantum-classical inference component"
+  - "Integrated inference into a React-based application"
+results: "Improved the VQC from majority-class prediction to genuine/FAKE-class detection, achieving 0.702 specificity."
+repoUrl: "https://github.com/NYN-05/Major-project"
+status: "in-progress"
 featured: true
-startDate: "2023-06-01"
-endDate: "2023-12-15"
-image: "https://picsum.photos/seed/task-manager-api/800/450.jpg"
-imageAlt: "Task Manager API dashboard showing project boards and task cards"
+startDate: "2024-01"
+endDate: ""
+image: "/images/deepfake-kyc.svg"
+imageAlt: "Deepfake detection pipeline architecture showing rPPG analysis and quantum-classical ML components"
 ---

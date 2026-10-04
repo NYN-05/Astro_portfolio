@@ -1,24 +1,31 @@
 ---
-title: "Portfolio Website"
-description: "Lightweight, accessible personal portfolio built with Astro, prioritizing performance and minimal JavaScript."
-problem: "Need a fast, maintainable portfolio that works on slow networks and older devices without sacrificing design quality."
-approach: "Static-first Astro site with semantic HTML, system fonts, optimized CSS, and zero client-side framework. Content-driven via Astro collections."
+title: "VeriSight V1 – AI-Powered Image Authenticity Platform"
+description: "An AI-powered image verification platform combining CNN, Vision Transformer, and OCR models through a FastAPI REST backend."
+problem: "Image authenticity verification requires combining multiple computer vision and recognition techniques within a practical inference system."
+approach: "Developed a FastAPI-based REST backend integrating CNN, Vision Transformer, and OCR models, with asynchronous and parallel inference, caching, concurrency controls, benchmarking, latency measurement, and threshold calibration."
 technologies:
-  - Astro
-  - TypeScript
-  - CSS (custom properties)
-  - Sharp (image optimization)
+  - Python
+  - FastAPI
+  - PyTorch
+  - OpenCV
+  - React
+  - CNN
+  - Vision Transformer
+  - OCR
 contributions:
-  - Configured static output with aggressive asset optimization
-  - Implemented responsive design with CSS Grid/Flexbox
-  - "Achieved Lighthouse scores: Performance 100, Accessibility 100, Best Practices 100, SEO 100"
-results: "Initial page load under 50KB gzipped; fully functional without JavaScript."
-repoUrl: "https://github.com/example/portfolio"
-demoUrl: "https://portfolio.example.com"
+  - "Developed the image-verification platform"
+  - "Integrated CNN, Vision Transformer, and OCR models"
+  - "Built the FastAPI REST backend"
+  - "Implemented asynchronous and parallel model inference"
+  - "Added caching and concurrency controls"
+  - "Implemented benchmark evaluation and latency measurement"
+  - "Implemented threshold calibration"
+results: "The resume does not provide a specific numerical accuracy, latency, throughput, or deployment metric."
+repoUrl: "https://github.com/NYN-05/VERISIGHT"
 status: "completed"
 featured: true
-startDate: "2024-01-01"
-endDate: "2024-02-15"
-image: "https://picsum.photos/seed/portfolio-site/800/450.jpg"
-imageAlt: "Portfolio website homepage showing hero section and project cards"
+startDate: "2023-06"
+endDate: "2023-12"
+image: "/images/verisight.svg"
+imageAlt: "VeriSight V1 platform showing image authenticity verification interface"
 ---

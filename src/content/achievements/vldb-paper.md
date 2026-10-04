@@ -1,8 +1,7 @@
 ---
-title: '"Efficient Consensus for Geo-Distributed Databases"'
-description: "Published at VLDB 2020. Novel consensus protocol reducing cross-region latency by 35%."
-date: "2020-08-01"
-issuer: "VLDB Conference"
-url: "https://vldb.org/"
-type: "publication"
+title: "2nd Place, AICTE Ideathon 2025"
+description: "Second-place achievement for a team project involving a community cloud-kitchen resource-sharing platform."
+date: "2025"
+issuer: "AICTE Ideathon"
+type: "hackathon"
 ---

@@ -1,13 +1,11 @@
 ---
-degree: "Bachelor of Science"
-field: "Computer Science"
-institution: "University of Texas at Austin"
-location: "Austin, TX"
-startDate: "2014-08-01"
-endDate: "2018-05-20"
-description: "Focus on Systems Programming and Algorithms. Capstone: Real-time collaboration engine for code editors."
+degree: "Bachelor of Engineering"
+field: "Computer Science (Data Science)"
+institution: "Acharya Institute of Technology"
+location: "Bangalore, India"
+startDate: "2023-09"
+endDate: ""
+description: "Undergraduate program in Computer Science with a Data Science specialization."
 honors:
-  - "Magna Cum Laude"
-  - "Dean's List (6 semesters)"
-  - "ACM ICPC Regional Finalist"
+  - "Certificate of Appreciation for Outstanding Academic Performance, 2024"
 ---

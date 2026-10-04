@@ -1,0 +1,14 @@
+{
+  "category": "AI & Information Retrieval",
+  "summary": "Experience with modern retrieval and language-model components for information-processing and AI systems.",
+  "evidence": "The resume lists practical familiarity with RAG, vector search, BM25, cross-encoder reranking, transformers, local LLMs, and Ollama.",
+  "items": [
+    "RAG",
+    "Vector Search",
+    "BM25",
+    "Cross-Encoder Reranking",
+    "Transformers",
+    "Local LLMs",
+    "Ollama"
+  ]
+}

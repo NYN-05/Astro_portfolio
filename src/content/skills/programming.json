@@ -1,6 +1,6 @@
 {
   "category": "Programming Languages",
-  "summary": "Choose the language the problem deserves, then keep the code readable.",
-  "evidence": "Go in the streaming pipeline, TypeScript in the task API and this portfolio site — one discipline across five languages.",
-  "items": ["TypeScript / JavaScript", "Python", "Go", "Rust", "SQL"]
+  "summary": "Strong foundation in programming and data-oriented development, with practical use of Python, Java, and SQL across software and AI/ML projects.",
+  "evidence": "Used Python extensively across AI/ML, backend, computer vision, and inference projects; Java and SQL are listed as core programming skills.",
+  "items": ["Python", "Java", "SQL"]
 }

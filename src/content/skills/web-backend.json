@@ -1,13 +1,16 @@
 {
-  "category": "Web & Backend",
-  "summary": "Design APIs, data models, and front-ends that hold up under real users.",
-  "evidence": "The Task Manager API shipped JWT auth, role-based access, and WebSockets at 85%+ test coverage; this site renders its UI with zero client-side JavaScript.",
+  "category": "Software Engineering & Backend",
+  "summary": "Focused on building backend services, REST APIs, modular software components, and reliable inference workflows.",
+  "evidence": "Built FastAPI-based systems, REST backends, API integrations, asynchronous and parallel inference pipelines, and backend-connected AI applications.",
   "items": [
-    "Node.js / Astro / React",
-    "REST / GraphQL APIs",
-    "PostgreSQL / MySQL",
-    "Redis / Caching",
-    "Docker / Kubernetes",
-    "gRPC / Protocol Buffers"
+    "Data Structures & Algorithms",
+    "Object-Oriented Programming",
+    "REST APIs",
+    "Backend Development",
+    "API Integration",
+    "FastAPI",
+    "Flask",
+    "Node.js",
+    "Uvicorn"
   ]
 }

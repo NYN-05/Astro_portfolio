@@ -24,7 +24,6 @@ const currentPath = Astro.url.pathname;
           <ul class="nav-links">
             <li><a href="/#about" aria-current={currentPath === '/' || currentPath === '' ? 'page' : undefined}>About</a></li>
             <li><a href="/#projects">Work</a></li>
-            <li><a href="/#experience">Experience</a></li>
             <li><a href="/resume/" aria-current={isResumePage ? 'page' : undefined}>Resume</a></li>
             <li><a href="/#contact">Contact</a></li>
           </ul>

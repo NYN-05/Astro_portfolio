@@ -1,0 +1,14 @@
+{
+  "category": "Tools & Scientific Computing",
+  "summary": "Development and experimentation workflow supported by version control, Linux tooling, testing, scientific computing, and quantum-machine-learning libraries.",
+  "evidence": "The resume explicitly lists Git, GitHub, Linux, pytest, NumPy, SciPy, and PennyLane.",
+  "items": [
+    "Git",
+    "GitHub",
+    "Linux",
+    "pytest",
+    "NumPy",
+    "SciPy",
+    "PennyLane"
+  ]
+}

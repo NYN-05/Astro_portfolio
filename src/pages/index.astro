@@ -2,14 +2,12 @@
 import { getCollection } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import ExperienceItem from '../components/ExperienceItem.astro';
 import EducationItem from '../components/EducationItem.astro';
 import SkillsList from '../components/SkillsList.astro';
 import AchievementsList from '../components/AchievementsList.astro';
 import { profile, isExternal } from '../data/profile';
 
 const projects = (await getCollection('projects')).sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''));
-const experience = (await getCollection('experience')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
 const education = (await getCollection('education')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
 const skills = (await getCollection('skills')).sort((a, b) => a.data.category.localeCompare(b.data.category));
 const achievements = (await getCollection('achievements')).sort((a, b) => b.data.date.localeCompare(a.data.date));
@@ -83,21 +81,6 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       </header>
       <p class="skills-intro">Capabilities are organized by what they make possible, with each record tied back to existing work.</p>
       <SkillsList skills={skills} />
-    </div>
-  </section>
-
-  <section id="experience" class="section section-band" aria-labelledby="experience-title">
-    <div class="container container-wide">
-      <header class="section-heading">
-        <div>
-          <p class="section-kicker">Engineering log</p>
-          <h2 id="experience-title">Work that improves the system around it.</h2>
-        </div>
-        <p>Selected roles, operating context, and contributions across product engineering and infrastructure.</p>
-      </header>
-      <div class="timeline">
-        {experience.map((exp) => <ExperienceItem experience={exp} />)}
-      </div>
     </div>
   </section>
 
