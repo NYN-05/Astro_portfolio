@@ -1,0 +1,9 @@
+# Security Contact Information
+# This file provides security researchers with contact information for responsible disclosure.
+
+Contact: mailto:security@example.com
+Expires: 2027-12-31T00:00:00.000Z
+Encryption: https://example.com/pgp-key.asc
+Preferred-Languages: en
+Canonical: https://portfolio.example.com/.well-known/security.txt
+Policy: https://portfolio.example.com/security-policy
