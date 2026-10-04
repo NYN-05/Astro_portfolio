@@ -74,7 +74,11 @@
   transition: background-color var(--transition-normal);
 }
 .project-card:hover {
-  background: color-mix(in srgb, var(--color-surface) 92%, var(--color-accent) 8%);
+  background: color-mix(
+    in srgb,
+    var(--color-surface) 92%,
+    var(--color-accent) 8%
+  );
 }
 .project-card--featured {
   min-height: 31rem;
@@ -224,7 +228,9 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   border-radius: var(--radius-sm);
-  transition: border-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 .project-card__tech-tag:hover {
   border-color: var(--color-accent);
@@ -283,7 +289,11 @@
   transition: background-color var(--transition-normal);
 }
 .skill-card:hover {
-  background: color-mix(in srgb, var(--color-surface) 92%, var(--color-accent) 8%);
+  background: color-mix(
+    in srgb,
+    var(--color-surface) 92%,
+    var(--color-accent) 8%
+  );
 }
 .skill-card__label,
 .skill-card__sub {
@@ -401,7 +411,9 @@
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   border-radius: var(--radius-sm);
-  transition: border-color var(--transition-fast), color var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 .tech-tag:hover {
   border-color: var(--color-accent);
@@ -493,7 +505,9 @@
   font-size: var(--font-size-xs);
   text-decoration: underline;
   text-decoration-color: var(--color-border);
-  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    text-decoration-color var(--transition-fast);
 }
 .recognition-link:hover {
   color: var(--color-accent);
