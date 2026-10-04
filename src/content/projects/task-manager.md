@@ -24,6 +24,6 @@ status: "in-progress"
 featured: true
 startDate: "2024-01"
 endDate: ""
-image: "/images/deepfake-kyc.svg"
+image: "/images/deepfake-kyc.png"
 imageAlt: "Deepfake detection pipeline architecture showing rPPG analysis and quantum-classical ML components"
 ---

@@ -2,6 +2,19 @@
 import MainLayout from '../layouts/MainLayout.astro';
 ---
 <MainLayout title="Page Not Found" description="The page you're looking for doesn't exist.">
-  <section class="error-section signal-grid" aria-labelledby="error-title"><div class="container error-content"><p class="section-kicker">Diagnostic / 404</p><p class="error-code">ERR_ROUTE_NOT_FOUND</p><h1 id="error-title">This page took a wrong turn.</h1><p>The requested route is unavailable or has moved. Return to the system index to continue.</p><a href="/" class="btn btn-primary btn-arrow">Return home</a></div></section>
-  <style>.error-section { display: grid; min-height: 70vh; place-items: center; border-bottom: 1px solid var(--color-border); } .error-content { max-width: 52rem; padding-top: var(--space-12); padding-bottom: var(--space-12); } .error-code { margin-bottom: var(--space-4); color: var(--color-accent); font-family: var(--font-family-mono); font-size: var(--font-size-sm); letter-spacing: .1em; } .error-section h1 { max-width: 12ch; font-size: clamp(3.5rem, 9vw, 7rem); } .error-section p:not(.section-kicker):not(.error-code) { max-width: 42ch; color: var(--color-text-muted); font-size: var(--font-size-lg); line-height: var(--line-height-relaxed); } .error-section .btn { margin-top: var(--space-4); }</style>
+  <section class="error-section signal-grid" aria-labelledby="error-title">
+    <div class="container error-content">
+      <p class="section-kicker">Diagnostic / 404</p>
+      <h1 id="error-title">This page took a wrong turn.</h1>
+      <p>The requested route is unavailable or has moved. Return to the system index to continue.</p>
+      <a href="/" class="btn btn-primary btn-arrow">Return home</a>
+    </div>
+  </section>
+  <style>
+    .error-section { display: grid; min-height: 70dvh; place-items: center; border-bottom: 1px solid var(--color-border); }
+    .error-content { max-width: 52rem; padding-top: var(--space-12); padding-bottom: var(--space-12); }
+    .error-section h1 { max-width: 12ch; font-size: clamp(3.5rem, 9vw, 7rem); }
+    .error-section p:not(.section-kicker) { max-width: 42ch; color: var(--color-text-muted); font-size: var(--font-size-lg); line-height: var(--line-height-relaxed); }
+    .error-section .btn { margin-top: var(--space-4); }
+  </style>
 </MainLayout>

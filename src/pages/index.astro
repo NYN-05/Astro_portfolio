@@ -59,7 +59,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
   </section>
 
   <section id="about" class="section section-band about-section" aria-labelledby="about-title">
-    <div class="container container-wide about-grid">
+    <div class="container container-wide split-grid">
       <div>
         <p class="section-kicker">Operator profile</p>
         <h2 id="about-title">Practical thinking for complex systems.</h2>
@@ -85,7 +85,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
   </section>
 
   <section class="section section-band records-section" aria-label="Background and recognition">
-    <div class="container container-wide records-grid">
+    <div class="container container-wide split-grid">
       <div id="education">
         <p class="section-kicker">Foundation records</p>
         <h2>Background</h2>
@@ -104,7 +104,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
   <section id="contact" class="section-lg contact-console" aria-labelledby="contact-title">
     <div class="container container-wide">
       <p class="section-kicker">Open channel</p>
-      <div class="contact-grid">
+      <div class="split-grid">
         <div>
           <h2 id="contact-title">Let's build something useful.</h2>
           <p>For engineering opportunities, collaborations, or technical conversations, reach out.</p>
@@ -124,16 +124,18 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
 
   <style>
     .hero {
-      min-height: min(47rem, calc(100vh - 4.5rem));
+      min-height: min(47rem, calc(100dvh - 4.5rem));
       border-bottom: 1px solid var(--color-border);
       position: relative;
+      background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
     }
     .hero::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: color-mix(in srgb, var(--color-primary) 3%, transparent);
+      background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
       pointer-events: none;
+      opacity: 0.6;
     }
     .hero-grid {
       display: grid;
@@ -192,40 +194,9 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       display: flex;
       flex-direction: column;
       padding: var(--space-6);
-      border: 1px solid var(--color-border);
-      background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+      background: var(--color-bg-subtle);
     }
-    .briefing-label, .briefing dt, .briefing-footer {
-      margin: 0;
-      color: var(--color-accent);
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-    .briefing dl {
-      display: grid;
-      gap: var(--space-5);
-      margin: auto 0;
-    }
-    .briefing dl div {
-      padding-top: var(--space-3);
-      border-top: 1px solid var(--color-border);
-    }
-    .briefing dd {
-      margin: var(--space-2) 0 0;
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-semibold);
-      color: var(--color-text);
-    }
-    .briefing-footer {
-      color: var(--color-text-subtle);
-    }
-    .about-grid, .records-grid, .contact-grid {
-      display: grid;
-      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-      gap: clamp(var(--space-8), 8vw, var(--space-20));
-    }
+    /* Using shared .briefing from components.css for responsive behavior */
     .about-grid h2 {
       max-width: 11ch;
       font-size: clamp(2.25rem, 4vw, 4rem);
@@ -265,8 +236,8 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
     }
     .contact-console {
       border-top: 1px solid var(--color-border);
-      background: color-mix(in srgb, var(--color-primary) 20%, var(--color-background));
-      color: var(--color-primary-foreground);
+      background: var(--color-surface-elevated);
+      color: var(--color-text);
     }
     .contact-console .section-kicker, .contact-console h2 { color: inherit; }
     .contact-console .section-kicker::before { background: var(--chart-4); }
@@ -344,7 +315,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
     }
     @media (max-width: 720px) {
       .hero { min-height: auto; }
-      .hero-grid, .about-grid, .records-grid, .contact-grid { grid-template-columns: 1fr; }
+      .hero-grid, .split-grid { grid-template-columns: 1fr; }
       .hero-grid { padding-top: var(--space-12); }
       .hero h1 { font-size: clamp(3.5rem, 18vw, 5.5rem); }
       .hero-actions .btn { width: 100%; }

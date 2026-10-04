@@ -6,11 +6,18 @@ interface Props {
 }
 
 const { skills } = Astro.props;
----
 
+const categoryClassMap: Record<string, string> = {
+  'AI & Information Retrieval': 'skill-card--ai',
+  'AI/ML & Computer Vision': 'skill-card--ml',
+  'Programming Languages': 'skill-card--lang',
+  'Software Engineering & Backend': 'skill-card--eng',
+  'Tools & Scientific Computing': 'skill-card--tools',
+};
+---
 <div class="skills-grid">
   {skills.map((skillGroup, index) => (
-    <article class="skill-card">
+    <article class={`skill-card ${categoryClassMap[skillGroup.data.category] || ''}`}>
       <p class="skill-card__label">
         <span class="skill-card__mark" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
         Capability

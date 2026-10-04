@@ -42,6 +42,22 @@
   --destructive-foreground: #ffffff;
   --sidebar-accent-foreground: #7f1d1d;
   --sidebar-primary-foreground: #ffffff;
+  --color-brand-hue: 15;
+  --color-brand-saturation: 63%;
+  --color-accent-hue: 38;
+  --color-accent-saturation: 72%;
+  --color-skill-ai: 260;
+  --color-skill-ml: 180;
+  --color-skill-lang: 15;
+  --color-skill-eng: 340;
+  --color-skill-tools: 220;
+  --color-project-diagram: 260;
+  --color-project-metrics: 180;
+  --color-project-preview: 340;
+  --color-recognition-award: 38;
+  --color-recognition-cert: 260;
+  --color-recognition-pub: 180;
+  --color-recognition-other: 220;
 }
 
 :root {
@@ -110,6 +126,36 @@
   --color-error: var(--destructive);
   --color-focus-ring: var(--ring);
 
+  --color-skill-ai: oklch(0.55 var(--color-skill-ai-sat, 0.15) var(--color-skill-ai));
+  --color-skill-ml: oklch(0.55 var(--color-skill-ml-sat, 0.15) var(--color-skill-ml));
+  --color-skill-lang: oklch(0.55 var(--color-skill-lang-sat, 0.15) var(--color-skill-lang));
+  --color-skill-eng: oklch(0.55 var(--color-skill-eng-sat, 0.15) var(--color-skill-eng));
+  --color-skill-tools: oklch(0.55 var(--color-skill-tools-sat, 0.15) var(--color-skill-tools));
+  --color-skill-ai-sat: 0.15;
+  --color-skill-ml-sat: 0.12;
+  --color-skill-lang-sat: 0.18;
+  --color-skill-eng-sat: 0.15;
+  --color-skill-tools-sat: 0.12;
+  --color-skill-ai-bg: color-mix(in srgb, var(--color-skill-ai) 12%, transparent);
+  --color-skill-ml-bg: color-mix(in srgb, var(--color-skill-ml) 12%, transparent);
+  --color-skill-lang-bg: color-mix(in srgb, var(--color-skill-lang) 12%, transparent);
+  --color-skill-eng-bg: color-mix(in srgb, var(--color-skill-eng) 12%, transparent);
+  --color-skill-tools-bg: color-mix(in srgb, var(--color-skill-tools) 12%, transparent);
+  --color-project-diagram: oklch(0.55 0.15 var(--color-project-diagram));
+  --color-project-metrics: oklch(0.55 0.12 var(--color-project-metrics));
+  --color-project-preview: oklch(0.55 0.15 var(--color-project-preview));
+  --color-project-diagram-bg: color-mix(in srgb, var(--color-project-diagram) 10%, transparent);
+  --color-project-metrics-bg: color-mix(in srgb, var(--color-project-metrics) 10%, transparent);
+  --color-project-preview-bg: color-mix(in srgb, var(--color-project-preview) 10%, transparent);
+  --color-recognition-award: oklch(0.65 0.18 var(--color-recognition-award));
+  --color-recognition-cert: oklch(0.55 0.15 var(--color-recognition-cert));
+  --color-recognition-pub: oklch(0.55 0.12 var(--color-recognition-pub));
+  --color-recognition-other: oklch(0.55 0.12 var(--color-recognition-other));
+  --hero-gradient-start: oklch(0.98 0.02 var(--color-brand-hue));
+  --hero-gradient-end: oklch(0.95 0.03 var(--color-accent-hue));
+  --hero-gradient-start-dark: oklch(0.12 0.03 var(--color-brand-hue));
+  --hero-gradient-end-dark: oklch(0.10 0.04 var(--color-accent-hue));
+
   --radius-sm: var(--radius);
   --radius-md: var(--radius);
   --radius-lg: calc(var(--radius) * 2);
@@ -164,6 +210,44 @@
   --destructive-foreground: #ffffff;
   --sidebar-accent-foreground: #fef3c7;
   --sidebar-primary-foreground: #faf7f5;
+  --color-brand-hue: 0;
+  --color-brand-saturation: 78%;
+  --color-accent-hue: 42;
+  --color-accent-saturation: 92%;
+  --color-skill-ai: 260;
+  --color-skill-ml: 160;
+  --color-skill-lang: 15;
+  --color-skill-eng: 330;
+  --color-skill-tools: 200;
+  --color-project-diagram: 260;
+  --color-project-metrics: 160;
+  --color-project-preview: 330;
+  --color-recognition-award: 42;
+  --color-recognition-cert: 260;
+  --color-recognition-pub: 160;
+  --color-recognition-other: 200;
+  --color-skill-ai-sat: 0.12;
+  --color-skill-ml-sat: 0.10;
+  --color-skill-lang-sat: 0.15;
+  --color-skill-eng-sat: 0.12;
+  --color-skill-tools-sat: 0.10;
+  --color-skill-ai-bg: color-mix(in srgb, var(--color-skill-ai) 15%, transparent);
+  --color-skill-ml-bg: color-mix(in srgb, var(--color-skill-ml) 15%, transparent);
+  --color-skill-lang-bg: color-mix(in srgb, var(--color-skill-lang) 15%, transparent);
+  --color-skill-eng-bg: color-mix(in srgb, var(--color-skill-eng) 15%, transparent);
+  --color-skill-tools-bg: color-mix(in srgb, var(--color-skill-tools) 15%, transparent);
+  --color-project-diagram: oklch(0.65 0.15 var(--color-project-diagram));
+  --color-project-metrics: oklch(0.65 0.12 var(--color-project-metrics));
+  --color-project-preview: oklch(0.65 0.15 var(--color-project-preview));
+  --color-project-diagram-bg: color-mix(in srgb, var(--color-project-diagram) 12%, transparent);
+  --color-project-metrics-bg: color-mix(in srgb, var(--color-project-metrics) 12%, transparent);
+  --color-project-preview-bg: color-mix(in srgb, var(--color-project-preview) 12%, transparent);
+  --color-recognition-award: oklch(0.75 0.18 var(--color-recognition-award));
+  --color-recognition-cert: oklch(0.65 0.15 var(--color-recognition-cert));
+  --color-recognition-pub: oklch(0.65 0.12 var(--color-recognition-pub));
+  --color-recognition-other: oklch(0.65 0.12 var(--color-recognition-other));
+  --hero-gradient-start: var(--hero-gradient-start-dark);
+  --hero-gradient-end: var(--hero-gradient-end-dark);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -200,16 +284,56 @@
     --destructive-foreground: #ffffff;
     --sidebar-accent-foreground: #fef3c7;
     --sidebar-primary-foreground: #faf7f5;
+    --color-brand-hue: 0;
+    --color-brand-saturation: 78%;
+    --color-accent-hue: 42;
+    --color-accent-saturation: 92%;
+    --color-skill-ai: 260;
+    --color-skill-ml: 160;
+    --color-skill-lang: 15;
+    --color-skill-eng: 330;
+    --color-skill-tools: 200;
+    --color-project-diagram: 260;
+    --color-project-metrics: 160;
+    --color-project-preview: 330;
+    --color-recognition-award: 42;
+    --color-recognition-cert: 260;
+    --color-recognition-pub: 160;
+    --color-recognition-other: 200;
+    --color-skill-ai-sat: 0.12;
+    --color-skill-ml-sat: 0.10;
+    --color-skill-lang-sat: 0.15;
+    --color-skill-eng-sat: 0.12;
+    --color-skill-tools-sat: 0.10;
+    --color-skill-ai-bg: color-mix(in srgb, var(--color-skill-ai) 15%, transparent);
+    --color-skill-ml-bg: color-mix(in srgb, var(--color-skill-ml) 15%, transparent);
+    --color-skill-lang-bg: color-mix(in srgb, var(--color-skill-lang) 15%, transparent);
+    --color-skill-eng-bg: color-mix(in srgb, var(--color-skill-eng) 15%, transparent);
+    --color-skill-tools-bg: color-mix(in srgb, var(--color-skill-tools) 15%, transparent);
+    --color-project-diagram: oklch(0.65 0.15 var(--color-project-diagram));
+    --color-project-metrics: oklch(0.65 0.12 var(--color-project-metrics));
+    --color-project-preview: oklch(0.65 0.15 var(--color-project-preview));
+    --color-project-diagram-bg: color-mix(in srgb, var(--color-project-diagram) 12%, transparent);
+    --color-project-metrics-bg: color-mix(in srgb, var(--color-project-metrics) 12%, transparent);
+    --color-project-preview-bg: color-mix(in srgb, var(--color-project-preview) 12%, transparent);
+    --color-recognition-award: oklch(0.75 0.18 var(--color-recognition-award));
+    --color-recognition-cert: oklch(0.65 0.15 var(--color-recognition-cert));
+    --color-recognition-pub: oklch(0.65 0.12 var(--color-recognition-pub));
+    --color-recognition-other: oklch(0.65 0.12 var(--color-recognition-other));
+    --hero-gradient-start: var(--hero-gradient-start-dark);
+    --hero-gradient-end: var(--hero-gradient-end-dark);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  .reduced-motion *,
+  .reduced-motion *::before,
+  .reduced-motion *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .reduced-motion html {
     scroll-behavior: auto !important;
   }
 }

@@ -14,18 +14,39 @@ if (variant === 'diagram' || (isFeatured && data.title.includes('Pipeline'))) ca
 else if (variant === 'metrics' || data.title.includes('Task Manager')) cardVariant = 'metrics';
 else if (variant === 'preview' || data.title.includes('Portfolio')) cardVariant = 'preview';
 else if (isFeatured) cardVariant = 'featured';
+
+const imageSrc = data.image;
+const imageSrcset = data.imageSrcset;
+const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
 ---
 <article class={`project-card project-card--${cardVariant}`} aria-labelledby={projectId}>
-  <div class="project-card__diagram signal-grid" aria-label={`${data.title} system diagram`}>
-    <div class="project-card__diagram-meta"><span>{index}</span><span>{status}</span></div>
-    <p class="project-card__diagram-label">{data.technologies.slice(0, 3).join(' / ')}</p>
-  </div>
+  {imageSrc && (
+    <div class="project-card__image" aria-hidden="true">
+      {imageSrcset ? (
+        <img
+          src={imageSrc}
+          srcset={imageSrcset}
+          sizes={imageSizes}
+          alt={data.imageAlt || data.title}
+          loading="lazy"
+        />
+      ) : (
+        <img src={imageSrc} alt={data.imageAlt || data.title} loading="lazy" />
+      )}
+    </div>
+  )}
   <div class="project-card__content">
     <header class="project-card__header">
       <h3 id={projectId} class="project-card__title">{data.title}</h3>
       <p class="project-card__status">{year}</p>
     </header>
     <p class="project-card__description">{data.problem || data.description}</p>
+    {data.approach && (
+      <div class="project-card__approach">
+        <strong>Approach</strong>
+        <span>{data.approach}</span>
+      </div>
+    )}
     <div class="project-card__result">
       <strong>Verified outcome</strong>
       <span>{result}</span>

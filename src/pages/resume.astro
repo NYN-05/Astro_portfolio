@@ -35,10 +35,12 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.category.lo
           <h2>Capability matrix</h2>
           <SkillsList skills={skills} />
         </section>
-        <section>
-          <h2>Engineering log</h2>
-          <div class="timeline">{experience.map((exp) => <ExperienceItem experience={exp} />)}</div>
-        </section>
+        {experience.length > 0 && (
+          <section>
+            <h2>Engineering log</h2>
+            <div class="timeline">{experience.map((exp) => <ExperienceItem experience={exp} />)}</div>
+          </section>
+        )}
         <section>
           <h2>Foundation records</h2>
           <div class="education-list">{education.map((edu) => <EducationItem education={edu} />)}</div>

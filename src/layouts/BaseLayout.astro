@@ -27,8 +27,13 @@ const ogImageURL = ogImage ? new URL(ogImage, siteURL).href : undefined;
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap" /></noscript>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -49,6 +54,12 @@ const ogImageURL = ogImage ? new URL(ogImage, siteURL).href : undefined;
         if (savedTheme === 'light' || savedTheme === 'dark') {
           document.documentElement.dataset.theme = savedTheme;
         }
+        const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const setReducedMotion = (reduce: boolean) => {
+          document.documentElement.classList.toggle('reduced-motion', reduce);
+        };
+        setReducedMotion(motionQuery.matches);
+        motionQuery.addEventListener('change', (e) => setReducedMotion(e.matches));
       })();
     </script>
   </head>

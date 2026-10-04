@@ -14,11 +14,18 @@ const ICONS: Record<string, string> = {
   other: '{ }',
   publication: '↗',
 };
----
 
+const typeClassMap: Record<string, string> = {
+  award: 'recognition-item--award',
+  hackathon: 'recognition-item--award',
+  certification: 'recognition-item--certification',
+  publication: 'recognition-item--publication',
+  other: 'recognition-item--other',
+};
+---
 <ol class="recognition-list">
   {achievements.map((achievement, index) => (
-    <li class:list={['recognition-item', index === 0 && 'recognition-item--featured']}>
+    <li class:list={['recognition-item', typeClassMap[achievement.data.type] || 'recognition-item--other', index === 0 && 'recognition-item--featured']}>
       <div class="recognition-mark" aria-hidden="true">
         <span class="recognition-number">{String(index + 1).padStart(2, '0')}</span>
         <span class="recognition-icon">{ICONS[achievement.data.type] ?? '🏆'}</span>
