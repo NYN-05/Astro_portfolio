@@ -26,6 +26,9 @@
   "allowScripts": {
     "esbuild": true
   },
+  "overrides": {
+    "http-cache-semantics": "^4.3.0"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.4",
