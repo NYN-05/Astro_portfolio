@@ -17,16 +17,16 @@
 
 ## ✨ Highlights
 
-| Feature | Details |
-|---------|---------|
-| ⚡ **Performance** | 100/100 Lighthouse (Performance, Accessibility, Best Practices, SEO) |
-| 📦 **Bundle Size** | ~50 KB gzipped initial load — no JS framework, no hydration |
-| ♿ **Accessibility** | WCAG 2.1 AA compliant, semantic HTML, `:focus-visible`, `prefers-reduced-motion` |
-| 🎨 **Theming** | Light/Dark mode with OS preference detection + manual toggle (persisted) |
-| 📱 **Responsive** | Mobile-first, fluid typography, CSS Grid/Flexbox layouts |
-| 🔍 **SEO Ready** | Open Graph, Twitter Cards, canonical URLs, sitemap, robots.txt |
-| 🛡 **Security** | CSP, security headers via `netlify.toml`, no inline styles/scripts |
-| 📝 **Content Collections** | Typed Markdown/JSON with Zod validation — build-time safety |
+| Feature                    | Details                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------- |
+| ⚡ **Performance**         | 100/100 Lighthouse (Performance, Accessibility, Best Practices, SEO)             |
+| 📦 **Bundle Size**         | ~50 KB gzipped initial load — no JS framework, no hydration                      |
+| ♿ **Accessibility**       | WCAG 2.1 AA compliant, semantic HTML, `:focus-visible`, `prefers-reduced-motion` |
+| 🎨 **Theming**             | Light/Dark mode with OS preference detection + manual toggle (persisted)         |
+| 📱 **Responsive**          | Mobile-first, fluid typography, CSS Grid/Flexbox layouts                         |
+| 🔍 **SEO Ready**           | Open Graph, Twitter Cards, canonical URLs, sitemap, robots.txt                   |
+| 🛡 **Security**             | CSP, security headers via `netlify.toml`, no inline styles/scripts               |
+| 📝 **Content Collections** | Typed Markdown/JSON with Zod validation — build-time safety                      |
 
 ---
 
@@ -91,6 +91,7 @@ Change your name/links? Edit `src/data/profile.ts`.
 ## 🎨 Customization Guide
 
 ### 1. Personal Identity (`src/data/profile.ts`)
+
 ```ts
 export const profile = {
   name: "Your Name",
@@ -98,14 +99,27 @@ export const profile = {
   focus: "Your specialization summary",
   about: ["Paragraph 1", "Paragraph 2"],
   contact: [
-    { label: "Email", value: "you@example.com", href: "mailto:you@example.com" },
-    { label: "GitHub", value: "github.com/you", href: "https://github.com/you" },
-    { label: "LinkedIn", value: "linkedin.com/in/you", href: "https://linkedin.com/in/you" },
+    {
+      label: "Email",
+      value: "you@example.com",
+      href: "mailto:you@example.com",
+    },
+    {
+      label: "GitHub",
+      value: "github.com/you",
+      href: "https://github.com/you",
+    },
+    {
+      label: "LinkedIn",
+      value: "linkedin.com/in/you",
+      href: "https://linkedin.com/in/you",
+    },
   ],
 };
 ```
 
 ### 2. Projects (`src/content/projects/*.md`)
+
 ```markdown
 ---
 title: "Project Name"
@@ -127,6 +141,7 @@ imageAlt: "Description for accessibility"
 ```
 
 ### 3. Skills (`src/content/skills/*.json`)
+
 ```json
 {
   "category": "Category Name",
@@ -137,12 +152,14 @@ imageAlt: "Description for accessibility"
 ```
 
 ### 4. Deploy Configuration (`astro.config.mjs`)
+
 ```js
 export default defineConfig({
-  site: 'https://your-domain.com',  // ← REQUIRED for canonical URLs, OG, sitemap
+  site: "https://your-domain.com", // ← REQUIRED for canonical URLs, OG, sitemap
   // ...
 });
 ```
+
 Also update `public/robots.txt` sitemap URL.
 
 ---
@@ -150,16 +167,19 @@ Also update `public/robots.txt` sitemap URL.
 ## 🌐 Deployment
 
 ### Netlify (Recommended)
+
 1. Connect repo at [app.netlify.com](https://app.netlify.com)
 2. Netlify auto-detects `netlify.toml` (build: `npm run build`, publish: `dist`)
 3. Add custom domain → done
 
 ### Vercel / Cloudflare Pages / GitHub Pages
+
 - Framework: **Astro** (auto-detected)
 - Build command: `npm run build`
 - Output directory: `dist`
 
 ### Any Static Host
+
 ```bash
 npm run build
 # Upload contents of dist/ to your host
@@ -169,29 +189,29 @@ npm run build
 
 ## 🛠 Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | **Astro 7** (static output) |
-| Language | **TypeScript** (strict mode) |
-| Styling | **Vanilla CSS** (custom properties, no framework) |
-| Content | **Astro Content Collections** (Markdown + JSON, Zod schemas) |
-| Images | **Astro Assets + Sharp** (auto-optimization) |
-| Icons | Inline SVG (zero requests) |
-| Fonts | System font stack (zero requests) |
-| CI/CD | **Netlify** (or GitHub Actions) |
+| Layer     | Technology                                                   |
+| --------- | ------------------------------------------------------------ |
+| Framework | **Astro 7** (static output)                                  |
+| Language  | **TypeScript** (strict mode)                                 |
+| Styling   | **Vanilla CSS** (custom properties, no framework)            |
+| Content   | **Astro Content Collections** (Markdown + JSON, Zod schemas) |
+| Images    | **Astro Assets + Sharp** (auto-optimization)                 |
+| Icons     | Inline SVG (zero requests)                                   |
+| Fonts     | System font stack (zero requests)                            |
+| CI/CD     | **Netlify** (or GitHub Actions)                              |
 
 ---
 
 ## 📊 Performance Profile
 
-| Metric | Target | Achieved |
-|--------|--------|----------|
-| First Contentful Paint | < 1.0 s | ~0.4 s |
-| Largest Contentful Paint | < 2.5 s | ~0.6 s |
-| Total Blocking Time | < 200 ms | 0 ms |
-| Cumulative Layout Shift | < 0.1 | 0 |
-| JS Bundle (gzipped) | < 10 KB | **0 bytes** |
-| HTML (gzipped) | < 20 KB | ~8 KB |
+| Metric                   | Target   | Achieved    |
+| ------------------------ | -------- | ----------- |
+| First Contentful Paint   | < 1.0 s  | ~0.4 s      |
+| Largest Contentful Paint | < 2.5 s  | ~0.6 s      |
+| Total Blocking Time      | < 200 ms | 0 ms        |
+| Cumulative Layout Shift  | < 0.1    | 0           |
+| JS Bundle (gzipped)      | < 10 KB  | **0 bytes** |
+| HTML (gzipped)           | < 20 KB  | ~8 KB       |
 
 ---
 
@@ -211,9 +231,9 @@ npm run build
 
 ## 📸 Screenshots
 
-| Homepage | Projects Section | Skills Grid |
-|----------|------------------|-------------|
-| ![Home](public/images/hero-workspace.webp) | *Add screenshot* | *Add screenshot* |
+| Homepage                                   | Projects Section | Skills Grid      |
+| ------------------------------------------ | ---------------- | ---------------- |
+| ![Home](public/images/hero-workspace.webp) | _Add screenshot_ | _Add screenshot_ |
 
 > **Tip:** Run `npm run preview` after build and capture screenshots for this section.
 

@@ -1,6 +1,7 @@
 export const profile = {
   name: "JHASHANK NAYAN",
-  tagline: "Computer Science (Data Science) Undergraduate | Software Development, Backend Engineering & AI/ML",
+  tagline:
+    "Computer Science (Data Science) Undergraduate | Software Development, Backend Engineering & AI/ML",
   focus:
     "Software development, backend engineering, REST API development, computer vision, AI/ML systems, inference pipelines, and performance-oriented system integration.",
   about: [
