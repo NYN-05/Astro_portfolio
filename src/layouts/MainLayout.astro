@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
           </span>
         </a>
         <div class="nav-controls">
-          <ul class="nav-links" role="list">
+          <ul class="nav-links">
             <li><a href="/#about" aria-current={currentPath === '/' || currentPath === '' ? 'page' : undefined}>About</a></li>
             <li><a href="/#projects">Work</a></li>
             <li><a href="/#experience">Experience</a></li>
@@ -223,7 +223,11 @@ const currentPath = Astro.url.pathname;
       if (!toggle) return;
       const root = document.documentElement;
       const media = window.matchMedia('(prefers-color-scheme: dark)');
-      const getTheme = () => root.dataset.theme || (media.matches ? 'dark' : 'light');
+      const VALID_THEMES = ['light', 'dark'];
+      const getTheme = () => {
+        const theme = root.dataset.theme;
+        return VALID_THEMES.includes(theme) ? theme : (media.matches ? 'dark' : 'light');
+      };
       const update = () => {
         const dark = getTheme() === 'dark';
         toggle.setAttribute('aria-pressed', String(dark));
@@ -234,8 +238,9 @@ const currentPath = Astro.url.pathname;
         if (icon) icon.textContent = dark ? '☀' : '◐';
       };
       toggle.addEventListener('click', () => {
-        root.dataset.theme = getTheme() === 'dark' ? 'light' : 'dark';
-        localStorage.setItem('portfolio-theme', root.dataset.theme);
+        const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = nextTheme;
+        localStorage.setItem('portfolio-theme', nextTheme);
         update();
       });
       media.addEventListener('change', () => {
