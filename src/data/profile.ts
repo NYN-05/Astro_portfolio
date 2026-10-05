@@ -3,7 +3,7 @@ export const profile = {
   tagline:
     "Computer Science (Data Science) Undergraduate | Software Development, Backend Engineering & AI/ML",
   focus:
-    "Software development, backend engineering, REST API development, computer vision, AI/ML systems, inference pipelines, and performance-oriented system integration.",
+    "Building reliable backend systems, REST APIs, and ML inference pipelines. Experienced in computer vision, physiological signal analysis, and integrating ML models with production systems.",
   about: [
     "Computer Science (Data Science) undergraduate with hands-on experience in software development, backend engineering, REST API development, and AI/ML systems. Experienced in building practical software systems that integrate machine learning models with backend and frontend components.",
     "Focused on developing reliable AI/ML and software engineering systems, with practical experience in inference pipelines, computer vision, physiological signal analysis, API integration, model evaluation, concurrency, caching, and workflow optimization.",

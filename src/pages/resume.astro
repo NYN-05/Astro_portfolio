@@ -18,12 +18,12 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.category.lo
     <div class="container container-wide">
       <header class="resume-header">
         <div>
-          <p class="section-kicker">Career system record</p>
+          <p class="section-kicker">Career overview</p>
           <h1 id="resume-title">Résumé</h1>
         </div>
         <div>
           <p>A focused overview of experience, capabilities, and selected engineering work.</p>
-          <a href="/resume.pdf" class="btn btn-primary" download>Download PDF ↓</a>
+          <a href="/resume.pdf" class="btn btn-primary" download>Download PDF</a>
         </div>
       </header>
       <div class="resume-content">
@@ -32,21 +32,21 @@ const skills = (await getCollection('skills')).sort((a, b) => a.data.category.lo
           {profile.about.map((paragraph) => <p>{paragraph}</p>)}
         </section>
         <section>
-          <h2>Capability matrix</h2>
+          <h2>Skills & expertise</h2>
           <SkillsList skills={skills} />
         </section>
         {experience.length > 0 && (
           <section>
-            <h2>Engineering log</h2>
+            <h2>Experience</h2>
             <div class="timeline">{experience.map((exp) => <ExperienceItem experience={exp} />)}</div>
           </section>
         )}
         <section>
-          <h2>Foundation records</h2>
+          <h2>Education</h2>
           <div class="education-list">{education.map((edu) => <EducationItem education={edu} />)}</div>
         </section>
         <section>
-          <h2>Project index</h2>
+          <h2>Projects</h2>
           <div class="project-index">
             {projects.map((project, index) => (
               <ProjectCard project={project} variant={index === 0 ? 'diagram' : index === 1 ? 'metrics' : 'preview'} />

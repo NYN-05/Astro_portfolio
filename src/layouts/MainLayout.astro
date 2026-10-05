@@ -7,7 +7,6 @@ interface Props { title: string; description?: string; ogImage?: string; canonic
 const { title, description, ogImage, canonicalURL } = Astro.props;
 const initials = profile.name.split(' ').filter(Boolean).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
 const isResumePage = Astro.url.pathname.startsWith('/resume');
-const currentPath = Astro.url.pathname;
 ---
 <BaseLayout title={title} description={description} ogImage={ogImage} canonicalURL={canonicalURL}>
   <header class="site-header" role="banner">
@@ -27,7 +26,7 @@ const currentPath = Astro.url.pathname;
             <li><a href="/resume/" aria-current={isResumePage ? 'page' : undefined}>Resume</a></li>
             <li><a href="/#contact">Contact</a></li>
           </ul>
-          <button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false">
+          <button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false" data-theme-toggle>
             <span class="theme-toggle-icon" aria-hidden="true">◐</span>
             <span class="theme-toggle-label">Dark</span>
           </button>
@@ -215,10 +214,34 @@ const currentPath = Astro.url.pathname;
         text-align: center;
       }
     }
+    /* Hardening: Better focus visible for all interactive elements */
+    .nav-links a:focus-visible,
+    .theme-toggle:focus-visible,
+    .nav-brand:focus-visible,
+    .site-footer a:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+      border-radius: var(--radius-sm);
+    }
+    /* Hardening: Ensure touch targets on mobile */
+    @media (pointer: coarse) {
+      .nav-links a {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--space-2) var(--space-3);
+      }
+      .theme-toggle {
+        min-height: 44px;
+        min-width: 44px;
+      }
+      .nav-brand {
+        min-height: 44px;
+      }
+    }
   </style>
   <script is:inline>
     (() => {
-      const toggle = document.querySelector('.theme-toggle');
+      const toggle = document.querySelector('[data-theme-toggle]');
       if (!toggle) return;
       const root = document.documentElement;
       const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -236,6 +259,10 @@ const currentPath = Astro.url.pathname;
         if (label) label.textContent = dark ? 'Light' : 'Dark';
         if (icon) icon.textContent = dark ? '☀' : '◐';
       };
+      // Initialize theme immediately to prevent flash
+      const initialTheme = getTheme();
+      root.dataset.theme = initialTheme;
+      update();
       toggle.addEventListener('click', () => {
         const nextTheme = getTheme() === 'dark' ? 'light' : 'dark';
         root.dataset.theme = nextTheme;
@@ -245,7 +272,6 @@ const currentPath = Astro.url.pathname;
       media.addEventListener('change', () => {
         if (!localStorage.getItem('portfolio-theme')) update();
       });
-      update();
     })();
   </script>
 </BaseLayout>

@@ -8,22 +8,22 @@ interface Props {
 const { experience } = Astro.props;
 const { data } = experience;
 ---
-<article class="timeline-item">
+<article class="timeline-item grid-safe">
   <header>
-    <h3>{data.role}</h3>
+    <h3 class="text-wrap-anywhere">{data.role}</h3>
     <p class="timeline-meta">
       {data.company}
       {data.location && <span> · {data.location}</span>}
       <span> · {formatDate(data.startDate)} – {data.endDate ? formatDate(data.endDate) : 'Present'}</span>
     </p>
   </header>
-  {data.description && <p class="timeline-desc">{data.description}</p>}
+  {data.description && <p class="timeline-desc text-wrap-anywhere">{data.description}</p>}
   <ul>
-    {data.achievements.map((achievement: string) => <li>{achievement}</li>)}
+    {data.achievements.map((achievement: string) => <li class="text-wrap-anywhere">{achievement}</li>)}
   </ul>
   {data.technologies && data.technologies.length > 0 && (
     <div class="timeline-technologies">
-      {data.technologies.map((tech: string) => <span class="tech-tag">{tech}</span>)}
+      {data.technologies.map((tech: string) => <span class="tech-tag text-truncate">{tech}</span>)}
     </div>
   )}
 </article>

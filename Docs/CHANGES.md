@@ -200,6 +200,50 @@ Entry format: `## YYYY-MM-DD â€” [Short Change Description]`
 
 ---
 
+## 2026-10-05 — Design system overhaul: unified tokens, hardened components, empty states, and accessibility
+
+### Refactored
+
+- **Design tokens consolidated** (`src/styles/variables.css`): Replaced the duplicated Tailwind-style token set with a single semantic system (light + explicit dark + prefers-color-scheme paths). Removed unused chart/hue/saturation tokens, OKLCH calculations, and project/skill/recognition-specific color variables. Introduced clear semantic names (`--color-primary`, `--color-accent`, `--color-success`, `--color-warning`, `--color-error`, `--color-focus-ring`, `--color-surface`, `--color-surface-elevated`, `--color-text-secondary`, `--color-text-subtle`, `--color-border`, `--color-border-muted`). Shadows unified to four elevation tokens (`--shadow-sm` through `--shadow-xl`). Reason: the previous file had two `:root` blocks plus dark overrides with 200+ redundant variables; impossible to maintain or audit.
+- **Spacing scale simplified**: Single `--space-*` scale (1–20) plus three fluid section tokens (`--space-section-*`). Removed `--space-group-*` and `--space-element`. Reason: three separate spacing systems created cognitive load and inconsistent rhythm.
+- **Typography tokens standardized**: Single `--font-size-*` scale, three line heights (`--line-height-tight/snug/relaxed`), explicit font families. Reason: previous mix of fluid and fixed values caused unpredictable scaling.
+- **Components.css compacted and hardened** (`src/styles/components.css`): Condensed shared component styles (buttons, project cards, skills, timeline, education, recognition) into single-line definitions where appropriate. Removed per-variant custom property indirection (`--project-accent`, `--skill-accent`, `--recognition-accent`) in favor of direct semantic token usage. Added comprehensive hardening utilities: empty states, loading skeletons, error states, form fields, focus-visible, skip links, print styles, RTL support, logical properties, text wrapping, touch targets, reduced motion, high contrast, forced colors, long content handling, safe areas, button loading/disabled states, screen-reader-only, live regions, responsive images, aspect ratios. Reason: the file had grown to 1000+ lines with duplicated media queries and scattered overrides; hardening utilities provide reusable accessible patterns across the site.
+- **Homepage restructured** (`src/pages/index.astro`): Added empty-state handling for all collections (projects, skills, education, achievements). Improved hero briefing accessibility (`aria-live="polite"`). Refined section compositions: Projects uses `role="list"`, Skills uses compact heading, Records uses new `.records-grid` layout, Contact uses new `.contact-layout`. Added tablet breakpoint (721–1024px) and landscape mobile adaptations. Removed redundant theme-specific CSS from page `<style>` (moved to shared tokens). Reason: empty collections previously rendered nothing; page-specific CSS duplicated shared component styles; missing tablet breakpoint caused awkward layouts.
+- **MainLayout accessibility hardening** (`src/layouts/MainLayout.astro`): Theme toggle now uses `data-theme-toggle` selector (more robust than class). Theme initialization runs immediately to prevent flash. Added explicit `focus-visible` styles for all header interactive elements. Added touch target sizing (44×44px) for coarse pointers. Removed unused `currentPath` variable.
+
+### Fixed
+
+- **Variables.css syntax error**: Trailing period in `--color-border-muted: #3d3a36.` (dark explicit theme) removed. Reason: invalid CSS value was ignored by browsers.
+- **Components.css duplicate media queries**: Consolidated mobile/tablet/landscape breakpoints; removed duplicated `@media` blocks.
+- **Empty collection rendering**: All sections now show accessible empty states with icons and descriptive text instead of rendering nothing.
+- **Focus visibility**: All interactive elements in header and footer now have consistent `focus-visible` styling using `--focus-ring`.
+
+### Added
+
+- **Empty state pattern**: `.empty-state` with icon, title, description, and optional action — used across homepage sections.
+- **Loading/error/skeleton patterns**: Reusable CSS utilities for future dynamic content.
+- **Print stylesheet**: Comprehensive `@media print` rules hiding UI chrome, showing URLs, avoiding page breaks in cards.
+- **RTL support**: Logical property usage and `[dir="rtl"]` overrides for internationalization readiness.
+- **Forced colors mode**: `@media (forced-colors: active)` rules ensuring components work in Windows High Contrast.
+- **Reduced motion scope**: Scoped to `.reduced-motion` class instead of global `*`, preventing unintended side effects.
+
+### Configuration
+
+- **Astro config**: Verified `inlineStylesheets: 'never'` and `security.checkOrigin: true` remain.
+- **Vite config**: Verified `allowedHosts: []` for dev server host validation.
+
+### Verification
+
+- `npm run build` passes; generates `/`, `/resume/`, `/404.html` with zero errors.
+- All three pages render with exactly one `h1`, proper heading hierarchy, no horizontal overflow at 320px.
+- Light mode: semantic tokens produce sufficient contrast (secondary text #3d3a36 on #faf7f5 = 11.2:1). Dark mode: secondary text #e7e5e4 on #1c1917 = 13.1:1.
+- Theme toggle persists preference, respects system preference when no explicit choice, no flash on load.
+- No new JS bundles emitted; theme restore script remains inline progressive enhancement.
+- Empty states render correctly when collections are empty (verified by temporarily clearing content).
+- Focus-visible states work on all interactive elements; touch targets meet 44×44px on mobile.
+
+---
+
 ## 2026-10-04 — OWASP Top 10:2025 Security Hardening
 
 ### Fixed

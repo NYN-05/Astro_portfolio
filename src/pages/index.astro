@@ -18,29 +18,29 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
   <section class="hero signal-grid" aria-labelledby="hero-title">
     <div class="container container-wide hero-grid">
       <div class="hero-copy">
-        <p class="hero-status"><span aria-hidden="true"></span> System online / available for selected opportunities</p>
+        <p class="hero-status"><span aria-hidden="true" aria-live="polite"></span> Available for selected opportunities</p>
         <p class="eyebrow">Software engineer · systems builder</p>
         <h1 id="hero-title">{profile.name}</h1>
         <p class="hero-lede">I build dependable software for problems that matter.</p>
         <p class="hero-focus">{profile.focus}. I turn ambiguous requirements into useful, measurable systems.</p>
         <div class="hero-actions">
-          <a href="#projects" class="btn btn-primary btn-arrow">Open project index</a>
-          <a href="/resume/" class="btn btn-secondary">View résumé</a>
+          <a href="#projects" class="btn btn-primary btn-arrow">View projects</a>
+          <a href="/resume/" class="btn btn-secondary">Download résumé</a>
         </div>
       </div>
-      <aside class="briefing" aria-label="Engineering focus">
-        <p class="briefing-label">Current briefing</p>
+      <aside class="briefing" aria-label="Current focus areas">
+        <p class="briefing-label">Focus areas</p>
         <dl>
-          <div><dt>01 / Build</dt><dd>Backend systems</dd></div>
-          <div><dt>02 / Operate</dt><dd>Cloud infrastructure</dd></div>
-          <div><dt>03 / Analyze</dt><dd>Data-intensive products</dd></div>
+          <div><dt>Build</dt><dd>Backend systems & APIs</dd></div>
+          <div><dt>Operate</dt><dd>Cloud infrastructure</dd></div>
+          <div><dt>Analyze</dt><dd>Data-intensive products</dd></div>
         </dl>
-        <p class="briefing-footer">Scroll for selected evidence ↓</p>
+        <p class="briefing-footer">Scroll for project evidence ↓</p>
       </aside>
     </div>
   </section>
 
-  <section id="projects" class="section section-band" aria-labelledby="projects-title">
+  <section id="projects" class="section" aria-labelledby="projects-title">
     <div class="container container-wide">
       <header class="section-heading">
         <div>
@@ -49,69 +49,102 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
         </div>
         <p>Each entry maps a problem to an implemented system and the verified outcome it produced.</p>
       </header>
-      <div class="project-index">
+      <div class="project-index" role="list" aria-label="Featured projects">
         {featuredProject && <ProjectCard project={featuredProject} variant="diagram" />}
         {supportingProjects.map((project, index) => (
           <ProjectCard project={project} variant={index === 0 ? 'metrics' : 'preview'} />
         ))}
+        {projects.length === 0 && (
+          <div class="empty-state" role="status" aria-live="polite">
+            <span class="empty-state__icon" aria-hidden="true">📦</span>
+            <h3 class="empty-state__title">No projects yet</h3>
+            <p class="empty-state__description">Projects will appear here once added to the collection.</p>
+          </div>
+        )}
       </div>
     </div>
   </section>
 
-  <section id="about" class="section section-band about-section" aria-labelledby="about-title">
+  <section id="about" class="section section-band" aria-labelledby="about-title">
     <div class="container container-wide split-grid">
       <div>
-        <p class="section-kicker">Operator profile</p>
+        <p class="section-kicker">Profile</p>
         <h2 id="about-title">Practical thinking for complex systems.</h2>
       </div>
       <div class="about-copy">
         {profile.about.map((paragraph) => <p>{paragraph}</p>)}
-        <a href="#contact" class="about-link">Start a conversation →</a>
+        <a href="#contact" class="about-link">Get in touch →</a>
       </div>
     </div>
   </section>
 
-  <section id="skills" class="section section-band" aria-labelledby="skills-title">
+  <section id="skills" class="section" aria-labelledby="skills-title">
     <div class="container container-wide">
       <header class="section-heading section-heading--compact">
         <div>
-          <p class="section-kicker">Capability matrix</p>
+          <p class="section-kicker">Skills & expertise</p>
           <h2 id="skills-title">Tools matter when they deliver a result.</h2>
         </div>
       </header>
       <p class="skills-intro">Capabilities are organized by what they make possible, with each record tied back to existing work.</p>
-      <SkillsList skills={skills} />
+      {skills.length > 0 ? (
+        <SkillsList skills={skills} />
+      ) : (
+        <div class="empty-state" role="status" aria-live="polite">
+          <span class="empty-state__icon" aria-hidden="true">🛠</span>
+          <h3 class="empty-state__title">No skills listed</h3>
+          <p class="empty-state__description">Add skill categories to the collection to populate this section.</p>
+        </div>
+      )}
     </div>
   </section>
 
   <section class="section section-band records-section" aria-label="Background and recognition">
-    <div class="container container-wide split-grid">
-      <div id="education">
-        <p class="section-kicker">Foundation records</p>
-        <h2>Background</h2>
-        <div class="education-list">
-          {education.map((edu) => <EducationItem education={edu} />)}
+    <div class="container container-wide">
+      <div class="records-grid">
+        <div id="education">
+          <p class="section-kicker">Education</p>
+          <h2>Background</h2>
+          <div class="education-list">
+            {education.length > 0 ? (
+              education.map((edu) => <EducationItem education={edu} />)
+            ) : (
+              <div class="empty-state" role="status" aria-live="polite">
+                <span class="empty-state__icon" aria-hidden="true">🎓</span>
+                <h3 class="empty-state__title">No education records yet</h3>
+                <p class="empty-state__description">Add education entries to the collection.</p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div id="achievements">
-        <p class="section-kicker">Signal records</p>
-        <h2>Recognition</h2>
-        <AchievementsList achievements={achievements} />
+        <div id="achievements">
+          <p class="section-kicker">Recognition</p>
+          <h2>Awards & publications</h2>
+          {achievements.length > 0 ? (
+            <AchievementsList achievements={achievements} />
+          ) : (
+            <div class="empty-state" role="status" aria-live="polite">
+              <span class="empty-state__icon" aria-hidden="true">🏆</span>
+              <h3 class="empty-state__title">No recognition records yet</h3>
+              <p class="empty-state__description">Add achievements to the collection.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   </section>
 
   <section id="contact" class="section-lg contact-console" aria-labelledby="contact-title">
     <div class="container container-wide">
-      <p class="section-kicker">Open channel</p>
-      <div class="split-grid">
+      <p class="section-kicker">Get in touch</p>
+      <div class="contact-layout">
         <div>
           <h2 id="contact-title">Let's build something useful.</h2>
           <p>For engineering opportunities, collaborations, or technical conversations, reach out.</p>
         </div>
-        <div class="contact-links">
+        <div class="contact-links" role="list" aria-label="Contact methods">
           {profile.contact.map((item, index) => (
-            <a href={item.href} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined}>
+            <a href={item.href} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} role="listitem">
               <span>0{index + 1} / {item.label}</span>
               <strong>{item.value}</strong>
               <i aria-hidden="true">↗</i>
@@ -139,7 +172,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(18rem, .75fr);
+      grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr);
       gap: clamp(var(--space-10), 8vw, var(--space-20));
       align-items: end;
       min-height: inherit;
@@ -195,6 +228,11 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       flex-direction: column;
       padding: var(--space-6);
       background: var(--color-bg-subtle);
+      border: 1px solid var(--color-border);
+    }
+    .briefing-label {
+      font-size: var(--font-size-xs);
+      opacity: 0.7;
     }
     /* Using shared .briefing from components.css for responsive behavior */
     .about-grid h2 {
@@ -228,6 +266,11 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       color: var(--color-text-muted);
       font-size: var(--font-size-lg);
     }
+    .records-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      gap: clamp(var(--space-8), 8vw, var(--space-20));
+    }
     .records-grid > div {
       min-width: 0;
     }
@@ -251,6 +294,12 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       color: color-mix(in srgb, var(--color-primary-foreground) 75%, transparent);
       font-size: var(--font-size-lg);
     }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+      gap: clamp(var(--space-8), 8vw, var(--space-20));
+      align-items: start;
+    }
     .contact-links {
       border-top: 1px solid color-mix(in srgb, var(--color-primary-foreground) 35%, transparent);
     }
@@ -269,60 +318,42 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       color: var(--chart-4);
     }
 
-    @media (prefers-color-scheme: light) {
-      :root:not([data-theme="dark"]) .contact-console {
-        color: var(--color-text);
-      }
-      :root:not([data-theme="dark"]) .contact-console p {
-        color: var(--color-text-secondary);
-      }
-      :root:not([data-theme="dark"]) .contact-links {
-        border-top: 1px solid var(--color-border);
-      }
-      :root:not([data-theme="dark"]) .contact-links a {
-        border-bottom: 1px solid var(--color-border);
-      }
-      :root:not([data-theme="dark"]) .contact-links a:hover {
-        color: var(--color-accent);
-      }
-    }
-    :global(:root[data-theme="light"]) .contact-console {
-      color: var(--color-text);
-    }
-    :global(:root[data-theme="light"]) .contact-console p {
-      color: var(--color-text-secondary);
-    }
-    :global(:root[data-theme="light"]) .contact-links {
-      border-top: 1px solid var(--color-border);
-    }
-    :global(:root[data-theme="light"]) .contact-links a {
-      border-bottom: 1px solid var(--color-border);
-    }
-    :global(:root[data-theme="light"]) .contact-links a:hover {
-      color: var(--color-accent);
-    }
-    .contact-links span {
-      font-family: var(--font-family-mono);
-      font-size: var(--font-size-xs);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .contact-links strong {
-      overflow-wrap: anywhere;
-    }
-    .contact-links i {
-      font-style: normal;
-    }
     @media (max-width: 720px) {
       .hero { min-height: auto; }
-      .hero-grid, .split-grid { grid-template-columns: 1fr; }
+      .hero-grid, .split-grid, .records-grid, .contact-layout { grid-template-columns: 1fr; }
       .hero-grid { padding-top: var(--space-12); }
       .hero h1 { font-size: clamp(3.5rem, 18vw, 5.5rem); }
       .hero-actions .btn { width: 100%; }
-      .briefing { min-height: 22rem; }
+      .briefing { min-height: auto; padding: var(--space-4); }
       .about-copy { padding-left: var(--space-4); }
       .contact-links a { grid-template-columns: 1fr auto; }
       .contact-links span { grid-column: 1 / -1; }
+    }
+
+    /* Tablet adaptation (721px - 1024px) */
+    @media (min-width: 721px) and (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(14rem, .8fr);
+      }
+      .split-grid {
+        grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      }
+      .records-grid {
+        grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      }
+      .contact-layout {
+        grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      }
+      .hero-grid {
+        padding-top: clamp(var(--space-12), 8vw, var(--space-16));
+      }
+      .hero h1 {
+        font-size: clamp(3.5rem, 8vw, 6rem);
+      }
+      .contact-links a {
+        grid-template-columns: minmax(6rem, .5fr) minmax(0, 1fr) auto;
+        padding: var(--space-4) 0;
+      }
     }
   </style>
 </MainLayout>

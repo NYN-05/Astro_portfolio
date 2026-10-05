@@ -1,4 +1,7 @@
 ﻿---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props { project: any; featured?: boolean; variant?: 'featured' | 'secondary' | 'diagram' | 'metrics' | 'preview'; }
 const { project, featured: featuredOverride, variant } = Astro.props;
 const { data } = project;
@@ -18,48 +21,73 @@ else if (isFeatured) cardVariant = 'featured';
 const imageSrc = data.image;
 const imageSrcset = data.imageSrcset;
 const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
+
+// Check if image is a local asset (starts with ./)
+const isLocalAsset = imageSrc && imageSrc.startsWith('./');
+let optimizedImage: { src: string; srcset: string; sizes: string; width: number; height: number } | null = null;
+let imageMetadata: ImageMetadata | null = null;
+
+if (isLocalAsset) {
+  const imagePath = imageSrc.replace('./', '');
+  // Use a mapping for known images
+  if (imagePath === 'deepfake-kyc.png') {
+    const deepfakeImage = await import('../content/projects/images/deepfake-kyc.png');
+    imageMetadata = deepfakeImage.default;
+  }
+}
 ---
 <article class={`project-card project-card--${cardVariant}`} aria-labelledby={projectId}>
   {imageSrc && (
-    <div class="project-card__image" aria-hidden="true">
-      {imageSrcset ? (
+    <div class="project-card__image aspect-photo" aria-hidden="true">
+      {isLocalAsset && imageMetadata ? (
+        <Image
+          src={imageMetadata}
+          alt={data.imageAlt || data.title}
+          loading="lazy"
+          widths={[400, 800, 1200]}
+          format="webp"
+          quality={80}
+          sizes={imageSizes}
+        />
+      ) : imageSrcset ? (
         <img
           src={imageSrc}
           srcset={imageSrcset}
           sizes={imageSizes}
           alt={data.imageAlt || data.title}
           loading="lazy"
+          class="img-cover"
         />
       ) : (
-        <img src={imageSrc} alt={data.imageAlt || data.title} loading="lazy" />
+        <img src={imageSrc} alt={data.imageAlt || data.title} loading="lazy" class="img-cover" />
       )}
     </div>
   )}
-  <div class="project-card__content">
+  <div class="project-card__content grid-safe">
     <header class="project-card__header">
-      <h3 id={projectId} class="project-card__title">{data.title}</h3>
+      <h3 id={projectId} class="project-card__title text-wrap-anywhere">{data.title}</h3>
       <p class="project-card__status">{year}</p>
     </header>
-    <p class="project-card__description">{data.problem || data.description}</p>
+    <p class="project-card__description text-wrap-anywhere">{data.problem || data.description}</p>
     {data.approach && (
       <div class="project-card__approach">
         <strong>Approach</strong>
-        <span>{data.approach}</span>
+        <span class="text-wrap-anywhere">{data.approach}</span>
       </div>
     )}
     <div class="project-card__result">
       <strong>Verified outcome</strong>
-      <span>{result}</span>
+      <span class="text-wrap-anywhere">{result}</span>
     </div>
     <div>
-      <span class="project-card__tech-label">System stack</span>
+      <span class="project-card__tech-label">Technologies</span>
       <div class="project-card__tech" aria-label="Technologies">
-        {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="project-card__tech-tag">{technology}</span>)}
+        {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="project-card__tech-tag text-truncate">{technology}</span>)}
       </div>
     </div>
     <footer class="project-card__actions">
-      {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} on GitHub`}>Source</a>}
-      {data.demoUrl && <a href={data.demoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} demo`}>Live system</a>}
+      {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} source code on GitHub`}>View source</a>}
+      {data.demoUrl && <a href={data.demoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} live demo`}>Live demo</a>}
     </footer>
   </div>
 </article>

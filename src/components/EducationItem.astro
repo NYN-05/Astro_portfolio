@@ -8,17 +8,17 @@ interface Props {
 const { education } = Astro.props;
 const { data } = education;
 ---
-<article class="education-item">
-  <h3>{data.degree} in {data.field}</h3>
+<article class="education-item grid-safe">
+  <h3 class="text-wrap-anywhere">{data.degree} in {data.field}</h3>
   <p class="education-meta">
     {data.institution}
     {data.location && <span> · {data.location}</span>}
     <span> · {formatDate(data.startDate)} – {data.endDate ? formatDate(data.endDate) : 'Present'}</span>
   </p>
-  {data.description && <p class="education-desc">{data.description}</p>}
+  {data.description && <p class="education-desc text-wrap-anywhere">{data.description}</p>}
   {data.honors && data.honors.length > 0 && (
     <ul class="honors-list">
-      {data.honors.map((honor: string) => <li>{honor}</li>)}
+      {data.honors.map((honor: string) => <li class="text-truncate">{honor}</li>)}
     </ul>
   )}
 </article>
