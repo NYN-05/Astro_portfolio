@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import astroPlugin from 'eslint-plugin-astro';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
+import jsxA11y from 'eslint-plugin-jsx-a11y-x';
 import prettierConfig from 'eslint-config-prettier';
 
 export default [
@@ -29,7 +29,7 @@ export default [
   {
     files: ['**/*.astro'],
     plugins: {
-      'jsx-a11y': jsxA11y,
+      'jsx-a11y-x': jsxA11y,
     },
     rules: {
       ...jsxA11y.configs.recommended.rules,
