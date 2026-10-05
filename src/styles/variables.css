@@ -91,9 +91,12 @@
 
   /* Shadow — single token with elevation */
   --shadow-sm: 0 1px 2px 0 hsl(0 63% 18% / 0.08);
-  --shadow-md: 0 4px 6px -1px hsl(0 63% 18% / 0.1), 0 2px 4px -2px hsl(0 63% 18% / 0.1);
-  --shadow-lg: 0 10px 15px -3px hsl(0 63% 18% / 0.1), 0 4px 6px -4px hsl(0 63% 18% / 0.1);
-  --shadow-xl: 0 20px 25px -5px hsl(0 63% 18% / 0.15), 0 8px 10px -6px hsl(0 63% 18% / 0.1);
+  --shadow-md:
+    0 4px 6px -1px hsl(0 63% 18% / 0.1), 0 2px 4px -2px hsl(0 63% 18% / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px hsl(0 63% 18% / 0.1), 0 4px 6px -4px hsl(0 63% 18% / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px hsl(0 63% 18% / 0.15), 0 8px 10px -6px hsl(0 63% 18% / 0.1);
 
   /* Layout */
   --content-width: 780px;
@@ -156,9 +159,12 @@
 
     /* Shadows — more subtle in dark */
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.5), 0 8px 10px -6px hsl(0 0% 0% / 0.3);
+    --shadow-md:
+      0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
+    --shadow-lg:
+      0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
+    --shadow-xl:
+      0 20px 25px -5px hsl(0 0% 0% / 0.5), 0 8px 10px -6px hsl(0 0% 0% / 0.3);
 
     /* Hero gradient — atmospheric */
     --hero-gradient-start: #1f1a17;
@@ -205,9 +211,12 @@
   --color-border-muted: #dcd0c0;
 
   --shadow-sm: 0 1px 2px 0 hsl(0 63% 18% / 0.08);
-  --shadow-md: 0 4px 6px -1px hsl(0 63% 18% / 0.1), 0 2px 4px -2px hsl(0 63% 18% / 0.1);
-  --shadow-lg: 0 10px 15px -3px hsl(0 63% 18% / 0.1), 0 4px 6px -4px hsl(0 63% 18% / 0.1);
-  --shadow-xl: 0 20px 25px -5px hsl(0 63% 18% / 0.15), 0 8px 10px -6px hsl(0 63% 18% / 0.1);
+  --shadow-md:
+    0 4px 6px -1px hsl(0 63% 18% / 0.1), 0 2px 4px -2px hsl(0 63% 18% / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px hsl(0 63% 18% / 0.1), 0 4px 6px -4px hsl(0 63% 18% / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px hsl(0 63% 18% / 0.15), 0 8px 10px -6px hsl(0 63% 18% / 0.1);
 
   --hero-gradient-start: #fdf8f3;
   --hero-gradient-end: #fef3e8;
@@ -249,12 +258,13 @@
   --color-text-muted: #a8a29e;
   --color-text-subtle: #78716c;
   --color-border: #44403c;
-  --color-border-muted: #3d3a36.
-
-  --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-  --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
-  --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
-  --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.5), 0 8px 10px -6px hsl(0 0% 0% / 0.3);
+  --color-border-muted: #3d3a36. --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
+  --shadow-md:
+    0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
+  --shadow-lg:
+    0 10px 15px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -4px hsl(0 0% 0% / 0.3);
+  --shadow-xl:
+    0 20px 25px -5px hsl(0 0% 0% / 0.5), 0 8px 10px -6px hsl(0 0% 0% / 0.3);
 
   --hero-gradient-start: #1f1a17;
   --hero-gradient-end: #2a231e;

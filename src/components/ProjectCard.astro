@@ -6,10 +6,8 @@ interface Props { project: any; featured?: boolean; variant?: 'featured' | 'seco
 const { project, featured: featuredOverride, variant } = Astro.props;
 const { data } = project;
 const isFeatured = variant ? variant === 'featured' : (featuredOverride ?? data.featured);
-const status = data.status.replace('-', ' ');
 const year = data.startDate?.slice(0, 4) ?? '—';
 const result = data.results || data.contributions?.[0] || data.description;
-const index = isFeatured ? '01' : year;
 const projectId = `project-${data.title.replace(/\s+/g, '-')}`;
 
 let cardVariant = 'secondary';
@@ -24,7 +22,6 @@ const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
 
 // Check if image is a local asset (starts with ./)
 const isLocalAsset = imageSrc && imageSrc.startsWith('./');
-let optimizedImage: { src: string; srcset: string; sizes: string; width: number; height: number } | null = null;
 let imageMetadata: ImageMetadata | null = null;
 
 if (isLocalAsset) {

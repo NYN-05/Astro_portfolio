@@ -144,7 +144,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
         </div>
         <div class="contact-links" role="list" aria-label="Contact methods">
           {profile.contact.map((item, index) => (
-            <a href={item.href} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} role="listitem">
+            <a href={item.href} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined}>
               <span>0{index + 1} / {item.label}</span>
               <strong>{item.value}</strong>
               <i aria-hidden="true">↗</i>

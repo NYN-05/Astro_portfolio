@@ -361,7 +361,11 @@ button {
   .btn:active,
   .nav-links a:active,
   .recognition-item:active {
-    background: color-mix(in srgb, var(--color-surface) 90%, var(--color-accent) 10%);
+    background: color-mix(
+      in srgb,
+      var(--color-surface) 90%,
+      var(--color-accent) 10%
+    );
   }
 }
 
@@ -371,7 +375,11 @@ button {
   .btn:active,
   .nav-links a:active,
   .recognition-item:active {
-    background: color-mix(in srgb, var(--color-surface) 90%, var(--color-accent) 10%);
+    background: color-mix(
+      in srgb,
+      var(--color-surface) 90%,
+      var(--color-accent) 10%
+    );
   }
 }
 

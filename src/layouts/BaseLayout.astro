@@ -60,7 +60,7 @@ const ogImageURL = ogImage ? new URL(ogImage, siteURL).href : undefined;
           document.documentElement.dataset.theme = savedTheme;
         }
         const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const setReducedMotion = (reduce: boolean) => {
+        const setReducedMotion = (reduce) => {
           document.documentElement.classList.toggle('reduced-motion', reduce);
         };
         setReducedMotion(motionQuery.matches);

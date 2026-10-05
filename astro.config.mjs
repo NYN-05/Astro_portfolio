@@ -38,8 +38,6 @@ export default defineConfig({
         },
       },
     },
-    css: {
-      codeSplit: true,
-    },
+    
   },
 });
