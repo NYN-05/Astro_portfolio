@@ -26,6 +26,6 @@ status: "completed"
 featured: false
 startDate: "2023-01"
 endDate: "2023-06"
-image: "/images/preventive-movement.svg"
+image: "/images/preventive-movement.png"
 imageAlt: "Preventive Movement Intelligence system showing real-time posture analysis on Android"
 ---

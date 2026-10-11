@@ -55,5 +55,11 @@ Thumbs.db
 # playwright mcp output
 .playwright-mcp/
 
+# local scratch (playwright probes etc.)
+Temp/
+
 Docs/ui_design_rules.md
 Docs/impeccable_audit_rport.md
+# Local prompt/session files
+prompts.md
+session-*.md

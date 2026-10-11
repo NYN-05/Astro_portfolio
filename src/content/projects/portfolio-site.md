@@ -26,6 +26,6 @@ status: "completed"
 featured: true
 startDate: "2023-06"
 endDate: "2023-12"
-image: "/images/verisight.svg"
+image: "/images/verisight.png"
 imageAlt: "VeriSight V1 platform showing image authenticity verification interface"
 ---

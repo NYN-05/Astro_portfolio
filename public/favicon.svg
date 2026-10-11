@@ -1,5 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="8" fill="#9b2c2c"/>
-  <path d="M18 16L39 32L18 48" fill="none" stroke="#faf7f5" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter"/>
-  <path d="M39 32H48" fill="none" stroke="#faf7f5" stroke-width="7" stroke-linecap="square"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JN monogram favicon">
+  <rect width="64" height="64" fill="#F7F2EC"/>
+  <text x="32" y="42" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-size="27" font-weight="700" letter-spacing="-2"
+        fill="#B84D36">JN</text>
 </svg>

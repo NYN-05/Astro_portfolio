@@ -19,9 +19,7 @@
     "ci": "npm run check && npm run lint && npm run format"
   },
   "dependencies": {
-    "astro": "^7.3.5",
-    "dotenv": "^18.0.5",
-    "sarvamai": "^1.1.10"
+    "astro": "^7.3.5"
   },
   "allowScripts": {
     "esbuild": true

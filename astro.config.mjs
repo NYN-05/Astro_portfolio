@@ -1,14 +1,15 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
   site: 'https://jhashanknayanportfolio.netlify.app',
   compressHTML: true,
-  integrations: [],
+  integrations: [sitemap()],
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
     assets: '_astro',
   },
   security: {
@@ -38,6 +39,5 @@ export default defineConfig({
         },
       },
     },
-    
   },
 });

@@ -1,40 +1,43 @@
 ﻿---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 
-interface Props { project: any; featured?: boolean; variant?: 'featured' | 'secondary' | 'diagram' | 'metrics' | 'preview'; }
-const { project, featured: featuredOverride, variant } = Astro.props;
+interface Props {
+  project: CollectionEntry<'projects'>;
+  variant?: 'diagram' | 'metrics' | 'preview' | 'featured' | 'secondary';
+}
+
+const { project, variant } = Astro.props;
 const { data } = project;
-const isFeatured = variant ? variant === 'featured' : (featuredOverride ?? data.featured);
+const isFeatured = variant === 'featured' || data.featured;
 const year = data.startDate?.slice(0, 4) ?? '—';
-const result = data.results || data.contributions?.[0] || data.description;
 const projectId = `project-${data.title.replace(/\s+/g, '-')}`;
 
-let cardVariant = 'secondary';
-if (variant === 'diagram' || (isFeatured && data.title.includes('Pipeline'))) cardVariant = 'diagram';
-else if (variant === 'metrics' || data.title.includes('Task Manager')) cardVariant = 'metrics';
-else if (variant === 'preview' || data.title.includes('Portfolio')) cardVariant = 'preview';
-else if (isFeatured) cardVariant = 'featured';
+let cardVariant: 'diagram' | 'metrics' | 'preview' | 'featured' | 'secondary' = 'secondary';
+if (variant) {
+  cardVariant = variant;
+} else if (isFeatured) {
+  cardVariant = 'featured';
+}
 
 const imageSrc = data.image;
-const imageSrcset = data.imageSrcset;
-const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
-
-// Check if image is a local asset (starts with ./)
 const isLocalAsset = imageSrc && imageSrc.startsWith('./');
 let imageMetadata: ImageMetadata | null = null;
 
 if (isLocalAsset) {
   const imagePath = imageSrc.replace('./', '');
-  // Use a mapping for known images
   if (imagePath === 'deepfake-kyc.png') {
     const deepfakeImage = await import('../content/projects/images/deepfake-kyc.png');
     imageMetadata = deepfakeImage.default;
   }
 }
+
+const normalizedImageSrc = imageSrc?.startsWith('./') ? imageSrc.replace('./', '/images/') : imageSrc;
+const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
 ---
 <article class={`project-card project-card--${cardVariant}`} aria-labelledby={projectId}>
-  {imageSrc && (
+  {normalizedImageSrc && (
     <div class="project-card__image aspect-photo" aria-hidden="true">
       {isLocalAsset && imageMetadata ? (
         <Image
@@ -46,41 +49,38 @@ if (isLocalAsset) {
           quality={80}
           sizes={imageSizes}
         />
-      ) : imageSrcset ? (
+      ) : data.imageSrcset ? (
         <img
-          src={imageSrc}
-          srcset={imageSrcset}
+          src={normalizedImageSrc}
+          srcset={data.imageSrcset}
           sizes={imageSizes}
           alt={data.imageAlt || data.title}
           loading="lazy"
           class="img-cover"
+          onerror="this.style.display='none'; this.nextElementSibling?.style.display='flex';"
         />
       ) : (
-        <img src={imageSrc} alt={data.imageAlt || data.title} loading="lazy" class="img-cover" />
+        <img
+          src={normalizedImageSrc}
+          alt={data.imageAlt || data.title}
+          loading="lazy"
+          class="img-cover"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
       )}
+      <div class="project-card__image-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:var(--color-bg-subtle); color:var(--color-text-muted); font-family:var(--font-family-mono); font-size:var(--font-size-xs);">
+        No preview available
+      </div>
     </div>
   )}
   <div class="project-card__content grid-safe">
     <header class="project-card__header">
-      <h3 id={projectId} class="project-card__title text-wrap-anywhere">{data.title}</h3>
-      <p class="project-card__status">{year}</p>
+      <h3 id={projectId} class="project-card__title">{data.title}</h3>
+      <time class="project-card__year" datetime={data.startDate ?? ''}>{year}</time>
     </header>
-    <p class="project-card__description text-wrap-anywhere">{data.problem || data.description}</p>
-    {data.approach && (
-      <div class="project-card__approach">
-        <strong>Approach</strong>
-        <span class="text-wrap-anywhere">{data.approach}</span>
-      </div>
-    )}
-    <div class="project-card__result">
-      <strong>Verified outcome</strong>
-      <span class="text-wrap-anywhere">{result}</span>
-    </div>
-    <div>
-      <span class="project-card__tech-label">Technologies</span>
-      <div class="project-card__tech" aria-label="Technologies">
-        {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="project-card__tech-tag text-truncate">{technology}</span>)}
-      </div>
+    <p class="project-card__description">{data.problem || data.description}</p>
+    <div class="project-card__tech" aria-label="Technologies">
+      {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="tech-tag">{technology}</span>)}
     </div>
     <footer class="project-card__actions">
       {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} source code on GitHub`}>View source</a>}

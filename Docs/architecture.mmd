@@ -1,0 +1,112 @@
+%%{init: {"theme": "base", "themeVariables": {"primaryColor": "#fff7ed", "primaryTextColor": "#1c1917", "primaryBorderColor": "#ea580c", "lineColor": "#64748b", "secondaryColor": "#eff6ff", "tertiaryColor": "#f5f3ff", "fontFamily": "ui-sans-serif, system-ui, -apple-system, sans-serif", "fontSize": "13px", "darkMode": false}}}%%
+%% Astro_portfolio — architecture diagram
+%% Render with any Mermaid viewer (GitHub, VS Code Mermaid extension, mermaid.live).
+%% Mirrors: astro.config.mjs, src/content.config.ts, src/layouts/, src/pages/, netlify.toml.
+
+flowchart TB
+
+    %% ================= Build time =================
+    subgraph buildtime["⚙️ Build time — astro build (static output)"]
+        direction TB
+
+        subgraph content["Content layer — typed collections"]
+            direction TB
+            md("Markdown entries<br/>projects · experience<br/>education · achievements")
+            jsn("JSON entries<br/>skills")
+            cfg{{"content.config.ts<br/>glob loaders + Zod 4 schemas<br/>invalid entry = build failure"}}
+            md --> cfg
+            jsn --> cfg
+        end
+
+        subgraph ui["Pages, layouts, components"]
+            direction TB
+            pages("Pages = routes<br/>index · 404")
+            main("MainLayout<br/>header · nav · theme toggle · footer")
+            base("BaseLayout<br/>head meta · OG · canonical<br/>theme-restore script")
+            comps("Components<br/>ProjectCard · EducationItem<br/>SkillsList · AchievementsList")
+            profile("data/profile.ts<br/>utils/format.ts")
+            pages --> main --> base
+            pages --> comps
+            pages --> profile
+            comps --> profile
+        end
+
+        subgraph styling["Styles — token cascade"]
+            direction TB
+            vars("variables.css<br/>theme tokens — source of truth")
+            glob("global.css<br/>imports variables + components")
+            compcss("components.css<br/>.btn · .grid · .card · .timeline")
+            vars --> glob
+            compcss --> glob
+        end
+
+        build(" astro astro build<br/>Vite + terser · sharp images<br/>hashed assets → _astro/")
+    end
+
+    main -- "imports" --> glob
+    cfg ==> build
+    pages ==> build
+    glob ==> build
+
+    %% ================= Artifact =================
+    dist("dist/ — 2 static pages<br/>index · 404.html<br/>+ _astro/ hashed assets")
+    pub("public/ — copied verbatim<br/>resume.pdf · images · favicon<br/>robots.txt · .well-known/")
+    build ==> dist
+    build --> pub
+
+    %% ================= Deployment =================
+    subgraph deploy["☁️ Deployment — Netlify (netlify.toml)"]
+        direction TB
+        cdn("Netlify CDN edge<br/>build: npm run build · publish: dist")
+        headers("Headers<br/>🛡 security: CSP · DENY · nosniff · COOP/COEP<br/>⚡ cache: _astro 1y · resume.pdf 1d · images 1y")
+        cdn --> headers
+    end
+    dist ==> cdn
+    pub --> cdn
+
+    %% ================= Runtime =================
+    subgraph runtime["🌐 Runtime — browser"]
+        direction TB
+        req("HTTP request")
+        html("Static HTML + CSS<br/>works with JS disabled")
+        theme("Pre-paint inline script<br/>localStorage → data-theme")
+        toggle("Theme toggle<br/>fallback: prefers-color-scheme")
+        req --> html --> theme --> toggle
+    end
+    headers ==> req
+
+    %% ================= Quality gates =================
+    subgraph gates["✅ Verification gates (package.json)"]
+        direction LR
+        g1("build") --> g2("check") --> g3("lint") --> g4("format") --> g5("ci")
+    end
+    build -. "exit 0 required" .-> g1
+
+    %% ================= Styling =================
+    classDef contentCls fill:#fff7ed,stroke:#ea580c,stroke-width:1px,color:#1c1917
+    classDef guardCls fill:#fef2f2,stroke:#dc2626,stroke-width:1.5px,color:#1c1917
+    classDef uiCls fill:#eff6ff,stroke:#2563eb,stroke-width:1px,color:#1c1917
+    classDef cssCls fill:#f5f3ff,stroke:#7c3aed,stroke-width:1px,color:#1c1917
+    classDef buildCls fill:#fff1e6,stroke:#ff5d01,stroke-width:1.5px,color:#1c1917
+    classDef artifactCls fill:#f4f4f5,stroke:#52525b,stroke-width:1px,color:#1c1917
+    classDef deployCls fill:#eefcfa,stroke:#00a39b,stroke-width:1px,color:#1c1917
+    classDef runtimeCls fill:#f0fdf4,stroke:#16a34a,stroke-width:1px,color:#1c1917
+    classDef gateCls fill:#f8fafc,stroke:#475569,stroke-width:1px,color:#1c1917
+
+    class md,jsn contentCls
+    class cfg guardCls
+    class pages,main,base,comps,profile uiCls
+    class vars,glob,compcss cssCls
+    class build buildCls
+    class dist,pub artifactCls
+    class cdn,headers deployCls
+    class req,html,theme,toggle runtimeCls
+    class g1,g2,g3,g4,g5 gateCls
+
+    style buildtime fill:#fffaf5,stroke:#ff5d01,stroke-width:1px,color:#1c1917
+    style content fill:#fffcf8,stroke:#fdba74,stroke-width:1px,color:#1c1917
+    style ui fill:#f8fbff,stroke:#93c5fd,stroke-width:1px,color:#1c1917
+    style styling fill:#faf8ff,stroke:#c4b5fd,stroke-width:1px,color:#1c1917
+    style deploy fill:#f6fdfc,stroke:#5eead4,stroke-width:1px,color:#1c1917
+    style runtime fill:#f7fdf9,stroke:#86efac,stroke-width:1px,color:#1c1917
+    style gates fill:#fcfcfd,stroke:#cbd5e1,stroke-width:1px,color:#1c1917

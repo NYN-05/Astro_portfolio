@@ -1,6 +1,7 @@
 dist/
 node_modules/
 .astro/
+Temp/
 *.config.js
 *.config.mjs
 *.config.ts

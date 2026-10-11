@@ -33,10 +33,11 @@ export default [
     },
     rules: {
       ...jsxA11y.configs.recommended.rules,
+      'jsx-a11y-x/no-noninteractive-element-interactions': 'off',
     },
   },
   prettierConfig,
   {
-    ignores: ['dist/', 'node_modules/', '.astro/', '*.config.js', '*.config.mjs', '*.config.ts'],
+    ignores: ['dist/', 'node_modules/', '.astro/', 'Temp/', '*.config.js', '*.config.mjs', '*.config.ts'],
   },
 ];

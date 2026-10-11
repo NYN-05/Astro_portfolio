@@ -14,18 +14,18 @@ const achievements = (await getCollection('achievements')).sort((a, b) => b.data
 const featuredProject = projects.find((project) => project.data.featured) ?? projects[0];
 const supportingProjects = projects.filter((project) => project !== featuredProject).slice(0, 2);
 ---
-<MainLayout title="Home" description="Professional portfolio showcasing projects, skills, and experience.">
-  <section class="hero signal-grid" aria-labelledby="hero-title">
+<MainLayout title="Home" description="Professional portfolio showcasing projects, skills, and education.">
+  <section class="hero" aria-labelledby="hero-title">
     <div class="container container-wide hero-grid">
       <div class="hero-copy">
         <p class="hero-status"><span aria-hidden="true" aria-live="polite"></span> Available for selected opportunities</p>
         <p class="eyebrow">Software engineer · systems builder</p>
         <h1 id="hero-title">{profile.name}</h1>
         <p class="hero-lede">I build dependable software for problems that matter.</p>
-        <p class="hero-focus">{profile.focus}. I turn ambiguous requirements into useful, measurable systems.</p>
+        <p class="hero-focus">{profile.focus} I turn ambiguous requirements into useful, measurable systems.</p>
         <div class="hero-actions">
           <a href="#projects" class="btn btn-primary btn-arrow">View projects</a>
-          <a href="/resume/" class="btn btn-secondary">Download résumé</a>
+          <a href="/resume.pdf" class="btn btn-secondary" download>Download résumé (PDF)</a>
         </div>
       </div>
       <aside class="briefing" aria-label="Current focus areas">
@@ -160,37 +160,35 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       min-height: min(47rem, calc(100dvh - 4.5rem));
       border-bottom: 1px solid var(--color-border);
       position: relative;
-      background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
-      pointer-events: none;
-      opacity: 0.6;
+      background-color: var(--color-bg);
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0 32V0H32' fill='none' stroke='%23808080' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+      background-size: 2rem 2rem, auto;
+      color: var(--color-text);
     }
     .hero-grid {
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr);
       gap: clamp(var(--space-10), 8vw, var(--space-20));
-      align-items: end;
+      align-items: start;
       min-height: inherit;
-      padding-top: clamp(var(--space-16), 11vw, 9rem);
+      padding-top: clamp(var(--space-12), 6vw, var(--space-20));
       padding-bottom: var(--space-12);
     }
     .hero-status {
       display: flex;
       gap: var(--space-2);
       align-items: center;
-      margin-bottom: var(--space-8);
-      color: var(--color-text-muted);
+      margin-bottom: var(--space-5);
+      color: var(--color-text-secondary);
       font-family: var(--font-family-mono);
       font-size: var(--font-size-xs);
       letter-spacing: .08em;
       text-transform: uppercase;
     }
     .hero-status span {
+      flex-shrink: 0;
       width: .55rem;
       height: .55rem;
       background: var(--color-success);
@@ -198,53 +196,106 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
     }
     .hero h1 {
       max-width: 24ch;
-      margin-bottom: var(--space-5);
-      font-size: clamp(4rem, 10vw, 8rem);
+      margin-bottom: var(--space-6);
+      font-family: var(--font-family-serif);
+      font-weight: var(--font-weight-bold);
+      font-size: clamp(2.75rem, 6.2vw, 5rem);
       line-height: var(--line-height-tight);
+      letter-spacing: -0.02em;
+      text-wrap: balance;
     }
     .hero-lede {
-      max-width: 18ch;
+      max-width: 30ch;
       margin-bottom: var(--space-4);
       font-family: var(--font-family-serif);
-      font-size: clamp(1.75rem, 3.4vw, 3rem);
-      line-height: 1.2;
-      color: var(--color-text-secondary);
+      font-size: clamp(1.5rem, 2.2vw, 2rem);
+      line-height: var(--line-height-snug);
+      color: var(--color-text);
+      text-wrap: balance;
     }
     .hero-focus {
       max-width: 53ch;
-      color: var(--color-text-muted);
-      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-10);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-md);
       line-height: var(--line-height-relaxed);
     }
     .hero-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-3);
-      margin-top: var(--space-8);
+      gap: var(--space-4);
+    }
+    .hero-actions .btn {
+      min-height: 3.5rem;
+      padding: var(--space-4) var(--space-8);
+      font-size: var(--font-size-base);
+    }
+    .hero-actions .btn-secondary {
+      border-color: var(--color-text-secondary);
+    }
+    .hero-actions .btn-secondary:hover,
+    .hero-actions .btn-secondary:focus-visible {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
     }
     .briefing {
-      align-self: stretch;
+      align-self: start;
       display: flex;
       flex-direction: column;
+      gap: var(--space-5);
       padding: var(--space-6);
-      background: var(--color-bg-subtle);
+      background: var(--color-surface);
       border: 1px solid var(--color-border);
+      border-top: 3px solid var(--color-accent);
+      box-shadow: var(--shadow-sm);
     }
     .briefing-label {
+      margin: 0;
       font-size: var(--font-size-xs);
-      opacity: 0.7;
+      color: var(--color-text-secondary);
+      font-family: var(--font-family-mono);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
-    /* Using shared .briefing from components.css for responsive behavior */
+    .briefing dl {
+      display: grid;
+      gap: var(--space-4);
+      margin: 0;
+    }
+    .briefing dt {
+      color: var(--color-accent);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .briefing dd {
+      margin: var(--space-1) 0 0;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-normal);
+    }
+    .briefing-footer {
+      margin: 0;
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      text-align: center;
+    }
     .about-grid h2 {
       max-width: 11ch;
-      font-size: clamp(2.25rem, 4vw, 4rem);
+      font-size: clamp(var(--font-size-3xl), 4vw, var(--font-size-4xl));
     }
     .about-copy {
       max-width: 52rem;
       padding-left: var(--space-6);
       border-left: 2px solid var(--color-accent);
       color: var(--color-text-secondary);
-      font-size: var(--font-size-lg);
+      font-size: var(--font-size-md);
       line-height: var(--line-height-relaxed);
     }
     .about-link {
@@ -264,7 +315,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       max-width: 35ch;
       margin: 0 0 var(--space-8);
       color: var(--color-text-muted);
-      font-size: var(--font-size-lg);
+      font-size: var(--font-size-md);
     }
     .records-grid {
       display: grid;
@@ -275,7 +326,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       min-width: 0;
     }
     .records-grid h2 {
-      font-size: clamp(2rem, 3.2vw, 3rem);
+      font-size: clamp(var(--font-size-3xl), 3.2vw, var(--font-size-4xl));
     }
     .contact-console {
       border-top: 1px solid var(--color-border);
@@ -283,16 +334,17 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       color: var(--color-text);
     }
     .contact-console .section-kicker, .contact-console h2 { color: inherit; }
-    .contact-console .section-kicker::before { background: var(--chart-4); }
+    .contact-console .section-kicker::before { background: var(--color-accent); }
     .contact-console h2 {
       max-width: 11ch;
-      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-size: clamp(var(--font-size-3xl), 5vw, var(--font-size-4xl));
+      letter-spacing: -0.02em;
     }
     .contact-console p {
       max-width: 34ch;
       margin: 0;
-      color: color-mix(in srgb, var(--color-primary-foreground) 75%, transparent);
-      font-size: var(--font-size-lg);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-md);
     }
     .contact-layout {
       display: grid;
@@ -301,7 +353,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       align-items: start;
     }
     .contact-links {
-      border-top: 1px solid color-mix(in srgb, var(--color-primary-foreground) 35%, transparent);
+      border-top: 1px solid var(--color-border);
     }
     .contact-links a {
       display: grid;
@@ -309,22 +361,22 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       gap: var(--space-4);
       align-items: center;
       padding: var(--space-5) 0;
-      border-bottom: 1px solid color-mix(in srgb, var(--color-primary-foreground) 35%, transparent);
+      border-bottom: 1px solid var(--color-border);
       color: inherit;
       text-decoration: none;
       transition: color var(--transition-fast);
     }
     .contact-links a:hover {
-      color: var(--chart-4);
+      color: var(--color-accent);
     }
 
     @media (max-width: 720px) {
       .hero { min-height: auto; }
       .hero-grid, .split-grid, .records-grid, .contact-layout { grid-template-columns: 1fr; }
       .hero-grid { padding-top: var(--space-12); }
-      .hero h1 { font-size: clamp(3.5rem, 18vw, 5.5rem); }
+      .hero h1 { font-size: clamp(2.5rem, 11vw, 3.75rem); }
       .hero-actions .btn { width: 100%; }
-      .briefing { min-height: auto; padding: var(--space-4); }
+      .briefing { padding: var(--space-5); }
       .about-copy { padding-left: var(--space-4); }
       .contact-links a { grid-template-columns: 1fr auto; }
       .contact-links span { grid-column: 1 / -1; }
@@ -348,7 +400,7 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
         padding-top: clamp(var(--space-12), 8vw, var(--space-16));
       }
       .hero h1 {
-        font-size: clamp(3.5rem, 8vw, 6rem);
+        font-size: clamp(var(--font-size-3xl), 8vw, var(--font-size-5xl));
       }
       .contact-links a {
         grid-template-columns: minmax(6rem, .5fr) minmax(0, 1fr) auto;

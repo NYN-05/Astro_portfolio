@@ -6,7 +6,6 @@ import '../styles/global.css';
 interface Props { title: string; description?: string; ogImage?: string; canonicalURL?: string; }
 const { title, description, ogImage, canonicalURL } = Astro.props;
 const initials = profile.name.split(' ').filter(Boolean).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
-const isResumePage = Astro.url.pathname.startsWith('/resume');
 ---
 <BaseLayout title={title} description={description} ogImage={ogImage} canonicalURL={canonicalURL}>
   <header class="site-header" role="banner">
@@ -23,10 +22,9 @@ const isResumePage = Astro.url.pathname.startsWith('/resume');
           <ul class="nav-links">
             <li><a href="/#about">About</a></li>
             <li><a href="/#projects">Work</a></li>
-            <li><a href="/resume/" aria-current={isResumePage ? 'page' : undefined}>Resume</a></li>
             <li><a href="/#contact">Contact</a></li>
           </ul>
-          <button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false" data-theme-toggle>
+          <button class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false" data-theme-toggle>
             <span class="theme-toggle-icon" aria-hidden="true">◐</span>
             <span class="theme-toggle-label">Dark</span>
           </button>
@@ -71,7 +69,7 @@ const isResumePage = Astro.url.pathname.startsWith('/resume');
       height: 2rem;
       place-items: center;
       background: var(--color-accent);
-      color: var(--accent-foreground);
+      color: var(--color-accent-foreground);
       font-family: var(--font-family-mono);
       font-size: var(--font-size-xs);
       font-weight: var(--font-weight-bold);

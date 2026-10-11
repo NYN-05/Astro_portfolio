@@ -13,8 +13,8 @@ import MainLayout from '../layouts/MainLayout.astro';
   <style>
     .error-section { display: grid; min-height: 70dvh; place-items: center; border-bottom: 1px solid var(--color-border); }
     .error-content { max-width: 52rem; padding-top: var(--space-12); padding-bottom: var(--space-12); }
-    .error-section h1 { max-width: 12ch; font-size: clamp(3.5rem, 9vw, 7rem); }
-    .error-section p:not(.section-kicker) { max-width: 42ch; color: var(--color-text-muted); font-size: var(--font-size-lg); line-height: var(--line-height-relaxed); }
+    .error-section h1 { max-width: 12ch; font-size: clamp(var(--font-size-4xl), 9vw, var(--font-size-5xl)); }
+    .error-section p:not(.section-kicker) { max-width: 42ch; color: var(--color-text-muted); font-size: var(--font-size-md); line-height: var(--line-height-relaxed); }
     .error-section .btn { margin-top: var(--space-4); }
   </style>
 </MainLayout>

@@ -49,7 +49,6 @@ jobs:
         run: |
           echo "Verifying build output..."
           test -f dist/index.html || exit 1
-          test -f dist/resume/index.html || exit 1
           test -f dist/404.html || exit 1
           test -f dist/_headers || exit 1
           test -f dist/robots.txt || exit 1
