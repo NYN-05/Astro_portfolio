@@ -1,4 +1,4 @@
-﻿---
+---
 import BaseLayout from './BaseLayout.astro';
 import { profile } from '../data/profile';
 import '../styles/global.css';
@@ -164,7 +164,7 @@ const initials = profile.name.split(' ').filter(Boolean).map((part) => part[0]).
       gap: var(--space-4);
     }
     .site-footer p { margin: 0; font-family: var(--font-family-mono); font-size: var(--font-size-xs); }
-    .site-footer p span { margin-right: var(--space-2); color: var(--color-accent); text-transform: uppercase; }
+    .site-footer p span { margin-right: var(--space-2); color: var(--color-primary-foreground); font-weight: var(--font-weight-bold); text-transform: uppercase; }
     .site-footer a {
       font-family: var(--font-family-mono);
       font-size: var(--font-size-xs);

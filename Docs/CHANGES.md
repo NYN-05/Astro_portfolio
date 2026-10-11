@@ -55,6 +55,23 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-11 — Fixed Footer 'System status' Label Contrast (WCAG)
+
+### Fixed
+
+- **'System status' footer label illegible in both themes** — Problem: the label in `MainLayout.astro` footer (`.site-footer p span`) was colored `var(--color-accent)` while sitting on a `var(--color-primary)` background; since `--color-accent` and `--color-primary` are the same value in both themes (`#c7352b` light, `#f06459` dark), contrast was 1:1 and the text was invisible. Root Cause: the palette-swap refactor aliased accent to primary, and the footer label never got an on-primary color. Solution: switched the span to `var(--color-primary-foreground)` (the theme-aware on-primary token) and added `font-weight: var(--font-weight-bold)` so emphasis no longer depends on color alone.
+
+### Verification
+
+- Contrast computed with the WCAG 2.x formula: light `#ffffff` on `#c7352b` = 5.29:1; dark `#191919` on `#f06459` = 5.59:1 — both pass WCAG AA for normal text (4.5:1).
+- `npm run check`: 0 errors. `npm run build`: exit 0; built `dist/index.html` contains `color:var(--color-primary-foreground)` in the scoped `.site-footer p span` rule.
+
+### Important Decisions
+
+- Used `--color-primary-foreground` rather than hardcoding or adding a new token: it is defined alongside `--color-primary` in both theme blocks of `variables.css`, so contrast is guaranteed by construction in light, dark, and the explicit `data-theme` paths.
+
+---
+
 ## 2026-10-11 — Fixed CI `astro check` Failure: Missing Project Schema Fields
 
 ### Fixed
