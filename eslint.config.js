@@ -24,6 +24,9 @@ export default [
       ...tseslint.configs.recommended.rules,
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      // TypeScript itself resolves undefined identifiers; Web API globals (Request,
+      // Response, crypto, ...) used by the Netlify Edge Function are unknown to ESLint.
+      'no-undef': 'off',
     },
   },
   {

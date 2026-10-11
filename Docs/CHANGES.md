@@ -55,6 +55,35 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-11 — Image Asset Lockdown: Edge Function Gating (Signed Cookie + Origin Checks)
+
+### Added
+
+- **`netlify/edge-functions/asset-guard.ts`** — single Netlify Edge Function (`path: '/*'`) that locks down proprietary image assets. Page/HTML requests mint a sliding `img_session` cookie: HMAC-SHA256 over the expiry (`v1.<exp>.<hex>`), keyed by the `ASSET_SIGNING_KEY` env var, delivered `HttpOnly; Secure; SameSite=Lax; Path=/`, 7-day expiry, re-issued only inside the last 3 days. Requests to `/images/*` and `/_astro/*` require (a) a valid, unexpired, untampered cookie — verified with a constant-time compare — and (b) a same-origin `Origin` or `Referer` header when either is present (cross-site `fetch`/hotlink probes fail; privacy-stripped headers fall back to the cookie gate, which alone blocks cross-site embedding because `SameSite=Lax` cookies are not sent on cross-site subresource requests). Passing requests are streamed from the static handler via `context.next()` with `Cross-Origin-Resource-Policy: same-origin`, `X-Content-Type-Options: nosniff`, and `Content-Disposition: inline` added; existing `Cache-Control` is preserved so repeat views stay on the immutable cache path. Denials return `403` with `Cache-Control: no-store` so a 403 can never be CDN-cached.
+
+### Changed
+
+- **`netlify.toml`** — header comment documenting the edge function and the required `ASSET_SIGNING_KEY` env var.
+- **`eslint.config.js`** — `'no-undef': 'off'` for `**/*.ts`: the new function uses Web API globals (`Request`, `Response`, `Headers`, `crypto`, …) that TypeScript resolves but ESLint's flat config had no globals for. Standard practice for TS files; `astro check` still catches real undefined identifiers.
+- **`AGENTS.md`** — recorded the asset-guard contract (env vars, fail-closed behavior, `astro dev` does not run edge functions so assets are ungated locally; use `netlify dev` to exercise the guard).
+- **`Docs/UIUX_Guide.md`** — Prettier reformat; it failed `npm run format` (pre-existing drift from the earlier push, would have failed CI).
+
+### Verification
+
+- Gates: `npm run lint` exit 0; `npm run format` "All matched files use Prettier code style!"; `npm run check` 0 errors; `npm run build` exit 0, 2 pages.
+- **11-scenario behavioral test** of the exported handler under Node 22 (`Temp/asset-guard.test.ts`, gitignored scratch) using the same Web Crypto/fetch primitives as the Deno edge runtime: (1) anonymous image → 403 + `no-store`; (2) page load mints `img_session` with HttpOnly/Secure/SameSite=Lax/Path; (3) cookie'd image → 200 + CORP/nosniff/disposition + cache-header passthrough; (4) foreign `Referer` → 403; (5) foreign `Origin` → 403; (6) same-origin `Referer` → 200; (7) tampered signature → 403; (8) expired session → 403; (9) `ASSET_GUARD_MODE=off` → passthrough; (10) missing key → image 403, page 200 with no cookie (fail closed); (11) fresh cookie not re-issued, near-expiry cookie refreshed. All passed.
+- Full e2e (real Netlify edge, cookie round-trip through a browser) requires a deploy with `ASSET_SIGNING_KEY` set — not verifiable locally; `netlify dev` is the local path.
+
+### Important Decisions
+
+- **Edge gating chosen over alternatives**: client-side obfuscation (renamed URLs, JS-only loading) is theater — DevTools defeats it instantly; moving images to Netlify Blobs/Cloudflare R2 + streaming adds a build-time upload step, a storage dependency, and third-party custody of the IP, for marginal gain over HTTP-layer gating; a third-party CDN with signed URLs sends the proprietary assets to an external processor. Netlify's documented pattern (edge function before static handler + `context.next()`) gives real anonymous-HTTP denial with zero build changes and sub-millisecond per-request overhead.
+- **Fail closed**: if `ASSET_SIGNING_KEY` is unset, images 403 rather than degrade to open — a missing env var must not silently disable the protection. Pages remain fully functional so the failure is visible but non-breaking. `ASSET_GUARD_MODE=off` is the explicit escape hatch.
+- **`/resume.pdf` intentionally NOT gated** — it is the public hero-CTA download (prior recorded decision); only project image assets are treated as proprietary.
+- **No og:image exemption needed**: no page currently emits `og:image`/`twitter:image` (verified in `BaseLayout.astro`). If one is added later, it must be exempted in the guard or social crawlers (which carry no cookie) will 403 on the preview image.
+- **Honest limitation recorded**: this blocks anonymous fetching, scripted scraping, and hotlinking — it cannot stop a human visitor from screenshotting what their own browser renders. No feasible browser-side DRM exists for a static portfolio; watermarking remains a content-level option if ever needed.
+
+---
+
 ## 2026-10-11 — Fixed Footer 'System status' Label Contrast (WCAG)
 
 ### Fixed

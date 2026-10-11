@@ -1,3 +1,8 @@
+# Image assets (/images/*, /_astro/*) are gated by the Netlify Edge Function
+# netlify/edge-functions/asset-guard.ts (auto-registered via its exported config).
+# REQUIRED: set ASSET_SIGNING_KEY (random 32+ byte secret) in Site settings >
+# Environment variables, or images fail closed (HTTP 403). ASSET_GUARD_MODE=off disables.
+
 [build]
   command = "npm run build"
   publish = "dist"

@@ -114,6 +114,12 @@ both themes — a leftover from the palette swap. Fix the colors; don't compensa
 - Before deploying, replace the placeholder origin `https://portfolio.example.com` in
   `astro.config.mjs` (`site`, drives canonical URLs/OG/sitemap) and in `public/robots.txt`
   (Sitemap URL). `netlify.toml` holds the CSP, security headers, and cache rules.
+- Image assets (`/images/*`, `/_astro/*`) are gated by the Netlify Edge Function
+  `netlify/edge-functions/asset-guard.ts`: page loads mint an HMAC-signed `img_session`
+  cookie (HttpOnly, SameSite=Lax); anonymous or cross-origin asset requests get 403.
+  Netlify env `ASSET_SIGNING_KEY` is required (images fail closed without it);
+  `ASSET_GUARD_MODE=off` bypasses. `astro dev` does not run edge functions — assets are
+  ungated locally; use `netlify dev` to exercise the guard.
 
 ## Housekeeping
 
