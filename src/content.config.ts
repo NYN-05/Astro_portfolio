@@ -16,6 +16,8 @@ const projects = defineCollection({
     demoUrl: z.url().optional(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
+    imageSrcset: z.string().optional(),
+    imageSizes: z.string().optional(),
     status: z.enum(['completed', 'in-progress', 'archived']).default('completed'),
     featured: z.boolean().default(false),
     startDate: z.string().optional(),

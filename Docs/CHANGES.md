@@ -55,6 +55,21 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-11 — Fixed CI `astro check` Failure: Missing Project Schema Fields
+
+### Fixed
+
+- **`astro check` errors in `ProjectCard.astro` (3 × ts 2339)** — Problem: CI failed on `npm run check` because the component reads `data.imageSrcset` and `data.imageSizes`, but the `projects` Zod schema in `src/content.config.ts` only defined `image` and `imageAlt`. Root Cause: the responsive-image support in `ProjectCard` was added without corresponding schema fields, and `astro check` only surfaced it once the component landed. Solution: added `imageSrcset: z.string().optional()` and `imageSizes: z.string().optional()` to the `projects` schema — optional on purpose (AGENTS.md: externally-derived fields must stay optional so missing data cannot break the build); no content-file changes needed.
+
+### Verification
+
+- `npm run check`: 0 errors, 0 warnings, 1 pre-existing hint (unused `media` attr in BaseLayout font link — non-fatal, does not fail CI).
+- `npm run build`: exit 0, 2 pages built.
+
+### Important Decisions
+
+- Schema fields made optional rather than required: no existing project markdown uses `imageSrcset`/`imageSizes`; the component already falls back to a single `src` when `imageSrcset` is absent, so optional fields preserve current rendering while unlocking responsive images for future content.
+
 ## 2026-10-10 — Removed /resume Endpoint: Single-Page Site
 
 ### Removed
