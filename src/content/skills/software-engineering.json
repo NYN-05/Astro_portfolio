@@ -1,0 +1,6 @@
+{
+  "category": "Software Engineering",
+  "order": 2,
+  "summary": "Backend services, REST APIs, and application work across the full inference stack.",
+  "items": ["Python", "FastAPI", "REST APIs", "React", "Java", "SQL", "Node.js"]
+}

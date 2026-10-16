@@ -64,7 +64,6 @@ html {
     border-width: 2px;
   }
   .project-card,
-  .skill-card,
   .recognition-item {
     border-width: 2px;
   }
@@ -113,7 +112,6 @@ html {
     color: CanvasText;
   }
   .project-card,
-  .skill-card,
   .recognition-item {
     background: Canvas;
     border-color: CanvasText;
@@ -335,7 +333,6 @@ button {
   .theme-toggle,
   .project-card__link,
   .recognition-link,
-  .skill-card__tech li,
   .contact-links a {
     min-height: 44px;
     min-width: 44px;
@@ -350,7 +347,6 @@ button {
 
 @media (hover: hover) and (pointer: fine) {
   .project-card:hover,
-  .skill-card:hover,
   .btn:hover,
   .nav-links a:hover,
   .recognition-item:hover,
@@ -361,8 +357,6 @@ button {
 }
 
 @media (hover: none) {
-  .project-card:active,
-  .skill-card:active,
   .btn:active,
   .nav-links a:active,
   .recognition-item:active {
@@ -371,6 +365,9 @@ button {
       var(--color-surface) 90%,
       var(--color-accent) 10%
     );
+  }
+  .project-card:active {
+    background: color-mix(in srgb, var(--card-bg) 92%, var(--card-accent) 8%);
   }
 }
 

@@ -1,0 +1,14 @@
+{
+  "category": "Computer Vision & Research",
+  "order": 4,
+  "summary": "Vision and signal analysis for images, video, pose, and authenticity verification.",
+  "items": [
+    "OpenCV",
+    "MediaPipe",
+    "MoveNet",
+    "TensorFlow Lite",
+    "CNNs",
+    "Vision Transformers",
+    "OCR"
+  ]
+}

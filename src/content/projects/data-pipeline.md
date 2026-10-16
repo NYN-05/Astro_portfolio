@@ -1,5 +1,6 @@
 ---
 title: "Preventive Movement Intelligence – BIRAC Idea Prototype"
+subtitle: "MoveNet + MediaPipe pose analysis"
 description: "A real-time Android-to-FastAPI posture analysis system using MoveNet and MediaPipe for pose inference, movement scoring, and risk analysis."
 problem: "Real-time exercise assessment requires automated posture analysis, movement-stage detection, form evaluation, and corrective feedback."
 approach: "Developed an Android-to-FastAPI system using MoveNet and MediaPipe for pose inference and implemented exercise-aware assessment for squats, push-ups, and sit-ups."

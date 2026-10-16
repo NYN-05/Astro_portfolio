@@ -64,226 +64,291 @@
   gap: var(--space-12);
 }
 .project-card {
-  position: relative;
+  /* Card-local palette, mapped to the site theme tokens: light mode renders a
+     light neutral card (surface on the warm off-white page); dark mode resolves
+     to the charcoal treatment. Print and forced-colors blocks override these. */
+  --card-bg: var(--color-surface);
+  --card-bg-hover: var(--color-surface-muted);
+  --card-border: var(--color-border);
+  --card-border-hover: color-mix(
+    in srgb,
+    var(--card-border) 55%,
+    var(--card-fg-muted)
+  );
+  --card-fg: var(--color-text);
+  --card-fg-secondary: var(--color-text-secondary);
+  --card-fg-muted: var(--color-text-muted);
+  --card-accent: var(--color-accent);
+  --card-chip-bg: var(--color-bg-muted);
+
   display: grid;
-  grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
-  min-height: 24rem;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "meta meta"
+    "image content";
+  column-gap: var(--space-8);
+  row-gap: var(--space-6);
+  padding: var(--space-8);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  color: var(--card-fg);
   transition:
     background-color var(--transition-normal),
     border-color var(--transition-normal);
 }
 .project-card:hover {
-  background: var(--color-surface-panel);
-  border-color: var(--color-accent);
+  background: var(--card-bg-hover);
+  border-color: var(--card-border-hover);
 }
-.project-card--featured {
-  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
-  min-height: 28rem;
+.project-card:not(:has(.project-card__image)) {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "meta"
+    "content";
+}
+.project-card__meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  color: var(--card-fg-muted);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.project-card--featured .project-card__meta-label {
+  color: var(--card-accent);
 }
 .project-card__image {
+  grid-area: image;
   position: relative;
+  align-self: start;
   overflow: hidden;
-  background: var(--color-bg-subtle);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  background: var(--card-chip-bg);
 }
 .project-card__image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   transition: transform var(--transition-normal);
 }
 .project-card:hover .project-card__image img {
   transform: scale(1.03);
 }
 .project-card__content {
+  grid-area: content;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  padding: clamp(var(--space-6), 4vw, var(--space-10));
-}
-.project-card--featured .project-card__content {
-  padding: clamp(var(--space-6), 4vw, var(--space-12));
-}
-.project-card__header {
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
   gap: var(--space-4);
+  min-width: 0;
+}
+.project-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 .project-card__title {
   margin: 0;
-  font-size: clamp(var(--font-size-xl), 3vw, var(--font-size-3xl));
+  color: var(--card-fg);
+  font-size: clamp(var(--font-size-xl), 2.5vw, var(--font-size-2xl));
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   letter-spacing: -0.02em;
 }
 .project-card--featured .project-card__title {
-  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-4xl));
-  letter-spacing: -0.02em;
+  font-size: clamp(var(--font-size-2xl), 3vw, var(--font-size-3xl));
 }
-.project-card--secondary .project-card__title {
-  font-size: clamp(var(--font-size-lg), 2.5vw, var(--font-size-2xl));
-}
-.project-card__status {
-  margin: var(--space-1) 0 0;
-  color: var(--color-text-subtle);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
+.project-card__subtitle {
+  margin: 0;
+  color: var(--card-fg-secondary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  letter-spacing: -0.01em;
 }
 .project-card__description {
-  max-width: 56ch;
   margin: 0;
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-relaxed);
-}
-.project-card--secondary .project-card__description {
+  max-width: 58ch;
+  color: var(--card-fg-muted);
   font-size: var(--font-size-base);
-}
-.project-card__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  align-items: center;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface-panel);
-  margin: calc(var(--space-3) * -1) calc(var(--space-5) * -1) 0;
-  padding: var(--space-3) var(--space-5);
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  line-height: var(--line-height-relaxed);
 }
 .project-card__tech {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.project-card__tech-tag {
-  padding: 0.25rem var(--space-2);
-  background: var(--color-bg-muted);
-  color: var(--color-text-muted);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
+.project-card .tech-tag {
+  padding: 0.25rem var(--space-3);
+  background: var(--card-chip-bg);
+  color: var(--card-fg-secondary);
   border-radius: var(--radius-sm);
-  transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast);
 }
-.project-card__tech-tag:hover {
-  background: var(--color-accent);
-  color: var(--color-primary-foreground);
+.project-card .tech-tag:hover {
+  background: var(--card-chip-bg);
+  color: var(--card-fg-secondary);
 }
 .project-card__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-6);
   margin-top: auto;
-  padding-top: var(--space-4);
+  padding-top: var(--space-2);
 }
 .project-card__link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-text);
+  min-height: 44px;
+  color: var(--card-accent);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--card-accent) 45%,
+    transparent
+  );
+  text-underline-offset: 0.22em;
   transition: color var(--transition-fast);
 }
 .project-card__link::after {
-  color: var(--color-accent);
   content: "↗";
   transition: transform var(--transition-fast);
 }
 .project-card__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-hover);
+  text-decoration-color: currentColor;
 }
 .project-card__link:hover::after {
   transform: translate(2px, -2px);
 }
 
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
+.skills-index {
+  border-top: 1px solid var(--color-border);
 }
-@media (min-width: 1024px) {
-  .skills-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-.skill-card {
+.skill-row {
   display: grid;
-  gap: var(--space-4);
-  min-height: 17rem;
-  padding: var(--space-6);
+  grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
+  gap: var(--space-3) clamp(var(--space-6), 4vw, var(--space-12));
+  align-items: start;
+  padding: var(--space-8) 0;
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
-  transition:
-    background-color var(--transition-normal),
-    border-color var(--transition-normal);
 }
-.skill-card:hover {
-  background: var(--color-surface-panel);
-  border-color: var(--color-accent);
+.skill-row__head {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  min-width: 0;
 }
-.skill-card__label,
-.skill-card__sub {
-  margin: 0;
-  color: var(--color-accent);
+.skill-row__number {
+  flex-shrink: 0;
+  color: var(--color-text-subtle);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.1em;
-  text-transform: uppercase;
 }
-.skill-card__mark {
-  margin-right: var(--space-2);
-  color: var(--color-text-subtle);
-}
-.skill-card__title {
+.skill-row__title {
   margin: 0;
+  min-width: 0;
   font-size: var(--font-size-xl);
   line-height: var(--line-height-snug);
   letter-spacing: -0.02em;
 }
-.skill-card__summary,
-.skill-card__evidence {
-  margin: 0;
+.skill-row__body {
+  min-width: 0;
+}
+.skill-row__desc {
+  max-width: 46ch;
+  margin: 0 0 var(--space-3);
   color: var(--color-text-secondary);
-  line-height: var(--line-height-normal);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
 }
-.skill-card__tech {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-3);
+.skill-row__list {
+  margin: 0;
+  padding: 0;
   list-style: none;
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
 }
-.skill-card__tech li {
-  color: var(--color-text-muted);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-xs);
-  background: var(--color-bg-muted);
-  padding: 0.25rem var(--space-2);
+.skill-row__list li {
+  display: inline;
+  /* Wrap between items; keep names intact where possible. hyphens:none stops
+     the global hyphens:auto from splitting "GitHub" into "Gi|tHub". The
+     overflow-wrap:break-word is a last resort only — it prevents a long name
+     (e.g. "TensorFlow Lite") from overflowing a 320px screen. */
+  hyphens: none;
+  overflow-wrap: break-word;
+  /* Hover/focus highlight room. The padding is cancelled by an equal negative
+     start margin, so text positions and line breaking are identical to the
+     plain layout — the interaction cannot cause a layout shift. The end margin
+     carries the divider gap OUTSIDE the painted box (see the ::after rule), so
+     the chip can never reach — let alone cover — the neighboring tab. */
+  padding: 0.15em 0.35em;
+  margin-inline: -0.35em calc(var(--space-3) - 0.35em);
   border-radius: var(--radius-sm);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
 }
-.skill-card__tech li + li::before {
-  display: none;
+.skill-row__list li:not(:last-child)::after {
+  /* No right margin inside the item's box: the background would paint over it
+     and spill toward the next tab. The 12px gap after the dot now lives in
+     the previous item's margin-inline-end (outside its chip). Dot position
+     and total text-to-text spacing are unchanged. */
+  margin-inline: var(--space-3) 0;
+  color: var(--color-text-subtle);
+  content: "·";
+  transition: color var(--transition-fast);
 }
-.skill-card__evidence {
-  align-self: end;
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
-  font-size: var(--font-size-sm);
+/* Hover: coral accent chip with on-accent text. Contrast is token-guaranteed
+   in both themes: #fff on #c7352b = 5.29:1 (light), #191919 on #f06459 =
+   5.59:1 (dark) — both WCAG AA for normal text. Scoped to hover:hover so a
+   touch tap cannot leave a sticky highlight. The trailing divider lives inside
+   this item's inline box, so it takes the on-accent color with the text. */
+@media (hover: hover) and (pointer: fine) {
+  .skill-row__list li:hover {
+    background: var(--color-accent);
+    color: var(--color-primary-foreground);
+  }
+  .skill-row__list li:hover::after {
+    color: var(--color-primary-foreground);
+  }
 }
-.skill-card__evidence .skill-card__sub {
-  margin-bottom: var(--space-2);
+/* Keyboard focus mirrors the hover treatment and keeps the global
+   --focus-ring halo (set on :focus-visible in global.css). */
+.skill-row__list li:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-primary-foreground);
+}
+.skill-row__list li:focus-visible::after {
+  color: var(--color-primary-foreground);
+}
+/* Windows High Contrast strips backgrounds and box-shadow; an outline
+   survives, so the focus indicator stays visible there too. */
+@media (forced-colors: active) {
+  .skill-row__list li:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
 }
 
 .tech-tag {
@@ -406,26 +471,25 @@
 
 /* Mobile (<=720px) */
 @media (max-width: 720px) {
-  .project-card,
-  .project-card--featured {
-    grid-template-columns: 1fr;
-  }
-  .project-card__image {
-    border-right: 0;
-    border-bottom: 1px solid var(--color-border);
-    aspect-ratio: 16 / 9;
-  }
-  .project-card__content {
+  .project-card {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "meta"
+      "image"
+      "content";
+    row-gap: var(--space-5);
     padding: var(--space-6);
   }
   .project-card__description {
     font-size: var(--font-size-base);
   }
   .project-card__actions {
-    padding-top: var(--space-3);
+    padding-top: var(--space-1);
   }
-  .skills-grid {
+  .skill-row {
     grid-template-columns: 1fr;
+    gap: var(--space-3);
+    padding: var(--space-6) 0;
   }
   .recognition-item {
     grid-template-columns: 2.5rem minmax(0, 1fr);
@@ -440,10 +504,8 @@
   .contact-layout {
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
   }
-  .project-card--diagram,
-  .project-card--metrics,
-  .project-card--preview {
-    grid-template-columns: minmax(0, 0.45fr) minmax(0, 1fr);
+  .project-card {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   }
   .hero-grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
@@ -735,15 +797,24 @@
     break-inside: avoid;
     page-break-inside: avoid;
     border: 1px solid #ccc;
-    min-height: auto;
+    /* Print the dark card as plain white-on-black text to save ink */
+    --card-bg: #ffffff;
+    --card-fg: #000000;
+    --card-fg-secondary: #333333;
+    --card-fg-muted: #444444;
+    --card-border: #cccccc;
+    --card-chip-bg: #f0f0f0;
+    --card-accent: #000000;
   }
   .project-card__image {
     display: none;
   }
-  .skill-card,
+  .skill-row,
   .recognition-item {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .recognition-item {
     border: 1px solid #eee;
   }
   h1,
@@ -827,7 +898,7 @@ li,
 /* High contrast */
 @media (prefers-contrast: more) {
   .project-card,
-  .skill-card,
+  .skill-row,
   .recognition-item,
   .education-list article,
   .field__input,
@@ -842,15 +913,26 @@ li,
 
 /* Forced colors */
 @media (forced-colors: active) {
+  .project-card {
+    /* Swap the card-local dark palette for system colors */
+    forced-color-adjust: none;
+    --card-bg: Canvas;
+    --card-bg-hover: Canvas;
+    --card-fg: CanvasText;
+    --card-fg-secondary: CanvasText;
+    --card-fg-muted: GrayText;
+    --card-border: CanvasText;
+    --card-border-hover: CanvasText;
+    --card-chip-bg: Canvas;
+    --card-accent: Highlight;
+  }
   .project-card,
-  .skill-card,
   .recognition-item {
     forced-color-adjust: none;
     background: Canvas;
     border-color: CanvasText;
   }
-  .project-card:hover,
-  .skill-card:hover {
+  .project-card:hover {
     background: Highlight;
     color: HighlightText;
   }
@@ -882,14 +964,14 @@ li,
 
 /* Long content */
 .project-card__title,
-.skill-card__title,
+.skill-row__title,
 .recognition-title,
 .education-list h3 {
   overflow-wrap: anywhere;
   word-break: break-word;
 }
 .project-card__description,
-.skill-card__summary,
+.skill-row__desc,
 .recognition-desc {
   overflow-wrap: anywhere;
 }
@@ -902,7 +984,7 @@ li,
   .project-card__title {
     font-size: clamp(1.25rem, 5vw, 2rem);
   }
-  .skill-card__title,
+  .skill-row__title,
   .recognition-title {
     font-size: var(--font-size-lg);
   }

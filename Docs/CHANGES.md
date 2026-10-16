@@ -55,7 +55,162 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
-## 2026-10-11 — Image Asset Lockdown: Edge Function Gating (Signed Cookie + Origin Checks)
+## 2026-10-16 — Skills Hover Chip Fixed: Coral Background No Longer Overlaps Adjacent Tabs
+
+### Fixed
+
+- **Problem**: the coral hover background on a skill item spilled past the item's text and covered the first ~6px of the neighboring tab's text — visible in both themes, on desktop and mobile.
+- **Root cause**: the trailing `·` divider (`li::after`) sits inside the item's inline box carrying `margin-inline: var(--space-3)` (12px) on _both_ sides, and an inline element's background paints its whole padding box — swallowing the divider content, the divider's 12px trailing margin, and the item's own `padding-right` (0.35em). The chip therefore reached text-end + ~32.6px while the next tab's text begins at +27px: a 5.6px overlap onto the neighbor.
+- **Solution** (`src/styles/components.css`): removed the divider's trailing margin (`margin-inline: var(--space-3) 0` — the dot keeps its exact 12px offset from the text) and moved that 12px into the item's `margin-inline-end: calc(var(--space-3) - 0.35em)`, a margin — outside the painted box, so no background can ever cover it. Flow-neutral by construction: text-to-text spacing and dot position are arithmetically unchanged (before `12 + dot + 12` = after `12 + dot + 5.6 + 6.4 − 5.6 + 5.6`), so no design or spacing changes; the chip now stops 6.4px short of the next tab's text (box-to-box clearance 0.8px — the remainder is transparent padding). No `z-index`/stacking changes were needed: containment is now geometric, so there is nothing left for the chip to paint over. Transition (120ms in/out), theme colors, `box-decoration-break: clone`, and the zero-layout-shift padding technique are untouched.
+
+### Verification
+
+- Gates: `npm run build` exit 0 (2 pages); `npm run check` 0 errors / 0 warnings / 1 pre-existing hint (unused `media` attr, BaseLayout); `npm run lint` 0 errors; `npm run format` passes. (`npm run ci` itself cannot run in this PowerShell — its `&&` script is unsupported by the shell; the three gates were run individually.)
+- Browser (Playwright/Chromium, `file://`), light + dark × 1440/390/320: the hovered item's painted rect was measured against nearest same-line neighbor _text_ rects via `Range.getClientRects` (per line, so wrapped tabs count correctly) — signed clearance **+6.4px** to the next tab and **+21.4px** to the previous tab in all six configurations; hover applies the coral background (`#c7352b` light / `#f06459` dark; contrast 5.29:1 / 5.59:1 on the on-accent text), mouse-away restores the transparent background, and `document.scrollWidth` reports zero horizontal overflow at every width.
+- Root cause reproduced: injecting the original rules into the built page re-creates the defect at **−5.6px** (chip covering the next tab's text), confirming both the cause and the exact 12px correction.
+- Screenshots at 390px (light + dark): chip sits strictly on the hovered item; the divider dot and the following tab are fully clear.
+
+### Important Decisions
+
+- **Amends the same-day "Skill Items: Coral Hover/Focus Interaction" entry**: the highlight technique and its zero-layout-shift guarantee stand unchanged; only the storage of the divider gap moved — from inside the painted box (`::after` margin) to `margin-inline-end`, which is what makes the chip strictly self-contained.
+
+---
+
+## 2026-10-16 — Project Cards Now Theme-Aware: Light-Neutral in Light Theme, Charcoal Preserved in Dark
+
+### Changed
+
+- **Card-local `--card-*` tokens remapped from fixed charcoal hexes to site theme tokens** (`src/styles/components.css`): `--card-bg: var(--color-surface)`, `--card-bg-hover: var(--color-surface-muted)`, `--card-border: var(--color-border)`, `--card-fg: var(--color-text)`, `--card-fg-secondary: var(--color-text-secondary)`, `--card-fg-muted: var(--color-text-muted)`, `--card-accent: var(--color-accent)`, `--card-chip-bg: var(--color-bg-muted)`. Reason: the previous hardcoded `#1c1c1b` palette painted dark cards in light mode, clashing with the warm off-white page. Light mode now renders white-surface cards with light-gray borders and `#c7352b` coral accents on the `#f5f5f3` page; dark mode resolves to the charcoal treatment (`#242424` surface, off-white text, `#f06459` accent) via the theme's own tokens. Layout, spacing, typography, and content untouched.
+
+- **Hover states made directional per theme.** `--card-border-hover` is now `color-mix(in srgb, var(--card-border) 55%, var(--card-fg-muted))` — the border strengthens toward the text color, so it darkens on the white card and lightens on the charcoal card. Link hover `#f68980` → `var(--color-accent-hover)` (`#a62d24` light, `#f27a6f` dark). The `hover: none` active state already mixed from `--card-bg`/`--card-accent` and now adapts automatically.
+
+### Fixed
+
+- **Chip text failed AA in light mode.** `--card-fg-muted` (#707070) on chip bg `--color-bg-muted` (#ebeae6) measured 4.06:1. Tech-tag and image-fallback text moved to `--card-fg-secondary`: 8.61:1 light, 11.11:1 dark.
+
+### Verification
+
+- `npm run check`: 0 errors. `npm run lint`: exit 0. `npm run format`: clean. `npm run build`: exit 0, 2 pages.
+- `dist/index.html` inlined CSS confirms `--card-bg:var(--color-surface)`, `--card-border:var(--color-border)`, `--card-accent:var(--color-accent)` etc.; `#232322`, `#4a4a46`, `#f68980` fully removed; remaining `#1c1c1b` is only the pre-existing `--hero-gradient-start` token (unrelated); remaining `#2a2a29` is the theme's own `--color-surface-panel` dark value.
+- Contrast measured for every pair in both themes, all ≥ WCAG AA — light: title 17.58:1, subtitle 10.37:1, description/meta 4.95:1, accent 5.29:1, accent hover 6.95:1, chips 8.61:1; dark: title 13.60:1, subtitle 10.46:1, description/meta 6.14:1, accent 4.93:1, accent hover 5.76:1, chips 11.11:1.
+- Theme switching: one token layer flips atomically with `<html data-theme>` (and `prefers-color-scheme` with no attribute); the BaseLayout pre-paint script sets the attribute before first paint, so no color flash and no per-card theme rules to drift out of sync.
+
+### Important Decisions
+
+- Kept the `--card-*` indirection rather than referencing theme vars in each rule: the print block (white paper) and forced-colors block (Canvas system colors) override the whole card palette in one place — that mechanism was preserved unchanged.
+- Section background needed no change: the projects section inherits the page background, which is already the warm off-white `--color-bg` in light mode.
+
+---
+
+## 2026-10-16 — Project Card Redesign: Charcoal Surface, Metadata Row, Title → Subtitle Hierarchy
+
+### Changed
+
+- **All three project cards redesigned per the product-design brief** (`src/components/ProjectCard.astro`, `src/styles/components.css`). New element order, verified in built HTML: metadata row (status/featured label left, year right) → 16:9 image with `object-fit: cover` → bold title → secondary subtitle → description → technology chips → "View source code ↗" link. Reason: the spec's hierarchy communicates purpose within seconds; the previous layout (4:3 image beside a header with the year) buried the description and had no subtitle slot.
+
+- **Fixed card palette as charcoal in both themes.** Card-local tokens on `.project-card` (`--card-bg: #1c1c1b`, `--card-fg: #f0f0ed`, `--card-fg-muted: #a3a3a1`, `--card-accent: #f06459`, …). Reason: the brief explicitly requires a near-black/off-white/muted-gray surface with one restrained accent; scoping it to the component keeps site theme tokens untouched. Measured contrast on `#1c1c1b`: title 14.94:1, subtitle 11.49:1, description/meta 6.75:1, accent link 5.42:1, chip text on chip bg 5.69:1 — all pass WCAG AA.
+
+- **Deepfake content split and corrected** (`src/content/projects/task-manager.md`). Title `Deepfake Detection Pipeline for KYC: rPPG + Hybrid Quantum-Classical ML` → title `Deepfake Detection for KYC` + subtitle `rPPG + Hybrid Quantum-Classical ML` (spec-defined). Description rewritten to explain _how_ rPPG signal analysis + hybrid quantum-classical ML support detection in low-res KYC video. `imageAlt` fixed: it claimed an "architecture diagram" but the asset is the rPPG·QC Verifier dashboard — alt now describes the actual screenshot. Reason: authenticity + WCAG alt must match the visible image.
+
+- **Two-column desktop / stacked mobile.** Grid areas `meta meta` / `image content` at ≥721px (tablet gets a 1.1/1 split for text room), single column ≤720px with chips wrapping naturally. Reason: spec's "balanced two-column composition … vertically stacked on mobile"; `minmax(0, …)` tracks prevent overflow at 320px.
+
+### Added
+
+- **Optional `subtitle` frontmatter field** (`src/content.config.ts`, z.string().optional() — missing value can't break the build). Subtitles added: VeriSight → "CNN + Vision Transformer + OCR", Preventive Movement → "MoveNet + MediaPipe pose analysis" — both derived verbatim from existing frontmatter, nothing invented. Documented in `README.md` §2.
+
+- **Metadata row** on every card: `FEATURED PROJECT` (accent, only on the explicit featured slot) / status label (`Completed project`) + `<time>` year. Reason: the spec's metadata row plus a factual label for supporting cards.
+
+### Refactored
+
+- **Removed the `variant` prop** (`diagram | metrics | preview | featured | secondary`) from `ProjectCard.astro` and `index.astro`. All variants rendered identically after the redesign; they were leftovers from the removed resume page. `index.astro` now passes an explicit `featured` prop for the top slot. Reason: one cohesive card design per the brief; `astro check` stays at 0 errors.
+
+### Fixed
+
+- **Image alt text was inaccessible.** The image wrapper carried `aria-hidden="true"`, which hid the `<img>` and its alt from assistive tech entirely. Removed. Reason: spec requires "descriptive image alternative text".
+
+- **Mobile tap flashed the dark card light** (`global.css` `hover: none`): the old `.project-card:active` painted `--color-surface` (near-white in light theme) over the charcoal card with off-white text. Rule split; the card now uses `color-mix` of its own `--card-bg` + `--card-accent`.
+
+- **Print/forced-colors palettes.** Print block and `forced-colors` block now swap the card-local tokens (white paper / `Canvas` + `CanvasText`) so the fixed charcoal surface doesn't print as solid black ink or render off-white text on `Canvas`.
+
+### Verification
+
+- `npm run check`: 0 errors, 0 warnings (1 pre-existing hint in `BaseLayout.astro`).
+- `npm run lint`: exit 0. `npm run format`: exit 0 (Prettier applied to `components.css`/`global.css`; it also re-serialized the in-progress skills-section edits in those files — formatting only, no semantics).
+- `npm run build`: exit 0, 2 pages.
+- `dist/index.html` inspected: 3 cards; featured = "Featured project"/2024/6 chips (Python, PyTorch, PennyLane, OpenCV, MediaPipe, React — exactly the spec list), supporting cards = "Completed project"/2023; DOM order of featured card confirmed meta → image → title → subtitle → description → tech → actions; stylesheet inlined (`--card-bg` present); heading outline 1×h1 / 6×h2 / 10×h3 / 3×h4, no skipped levels.
+
+### Important Decisions
+
+- **Featured label follows the explicit slot, not `data.featured`.** Two records (`task-manager`, `portfolio-site`) carry `featured: true`, but only the top slot shows `FEATURED PROJECT`; supporting cards show status labels.
+- **Chips capped at 6 per card** (`slice(0, 6)`), which renders exactly the six technologies the brief lists for the Deepfake card; `scikit-learn` (7th) is omitted from chips, still in frontmatter.
+- Card order unchanged (already correct): Deepfake 2024 → VeriSight 2023-06 → Preventive 2023-01, featured first, newest first.
+
+---
+
+## 2026-10-16 — Skill Items: Coral Hover/Focus Interaction
+
+### Changed
+
+- **Every skill item in the Skills & Expertise section now has a hover and keyboard-focus treatment** (`src/components/SkillsList.astro`, `src/styles/components.css`). On hover/focus the item's background transitions to the existing coral accent (`--color-accent`) and its text — plus the trailing `·` divider, which lives inside the item's inline box — switches to the theme's on-accent color (`--color-primary-foreground`); on leave it returns over the same 120ms (`--transition-fast`). Reason: requested interaction; restores the hover affordance the deleted pill-tag design used to have, on the editorial layout.
+
+### Added
+
+- **Zero-layout-shift highlight technique**: the items gained a small permanent `padding: 0.15em 0.35em` cancelled by an equal negative `margin-inline`, so the highlight has breathing room while text positions and line breaking stay byte-identical to the pre-interaction layout — the hover cannot reflow anything by construction. `box-decoration-break: clone` keeps wrapped items coherent across line breaks. Verified: document-relative geometry of the section and items is identical idle vs hovered in both themes.
+- **Keyboard focus state**: items carry `tabindex="0"` so keyboard users reach them in reading order; `:focus-visible` applies the same accent treatment plus the site's global `--focus-ring` halo. In Windows High Contrast (where backgrounds and box-shadow are stripped) a `2px solid Highlight` outline keeps the focus indicator visible.
+- Hover is scoped to `@media (hover: hover) and (pointer: fine)` so a touch tap cannot leave a sticky highlight.
+
+### Verification
+
+- Gates: `npm run build` exit 0 (2 pages); `npm run check` 0 errors / 0 warnings / 1 pre-existing hint (unused `media` attr, BaseLayout); `npm run lint` 0 errors (one justified `eslint-disable` — see Important Decisions); `npm run format` passes (ran `prettier --write` on two skills JSONs from the earlier redesign whose array wrapping drifted).
+- Browser (Playwright/Chromium, `file://`), 1440×900 × light + dark: hover verified with `elementFromPoint` confirming the cursor is on the item — light `#c7352b` bg + `#fff` text + white divider; dark `#f06459` bg + `#191919` text; mouse-away restores the exact idle computed styles; `transition-property: background-color, color` at `0.12s`. Keyboard: real `Tab` traversal lands on items with `:focus-visible` matching — accent bg + on-accent text + focus-ring shadow in both themes. Contrast: accent/on-accent = 5.29:1 (light) and 5.59:1 (dark), both WCAG AA. 320px viewport: zero skills-section elements past the viewport edge with the new padding. `prefers-reduced-motion: reduce`: transition duration collapses to `1e-05s` via the existing global rule.
+- Two earlier probe anomalies were test artifacts, not defects: a dark-theme hover miss caused by the sticky header occluding the hover point (re-verified clean), and an "idle vs hover geometry" mismatch caused by async webfont metrics shifting between snapshots (fixed by awaiting `document.fonts.ready`).
+
+### Important Decisions
+
+- **`tabindex="0"` on non-interactive items with a scoped lint suppression**: `jsx-a11y-x/no-noninteractive-tabindex` fires on the `li`s; the rule was suppressed file-wide in the component's frontmatter with a written justification rather than dropping keyboard support (the focus state was explicitly requested) or faking a `role` (items perform no action, so `role="button"` would lie to assistive tech). Known tradeoff: the items add 27 deliberate focus stops to the page's tab order — they are intentional focus targets for scanning, in reading order.
+- **Divider recolor on hover**: the `·` after each item is part of that item's inline box, so it would sit on the coral background in the idle grey. It transitions to the on-accent color with the text so the chip reads as one unit instead of showing a low-contrast dot.
+- **No new tokens**: hover/focus colors reuse `--color-accent` + `--color-primary-foreground`, the same pairing the site already uses for primary buttons, so both themes and the explicit `data-theme` paths are covered by construction.
+
+---
+
+## 2026-10-16 — Skills & Expertise Section Redesign: Editorial Rows Replace Card Grid
+
+### Changed
+
+- **Skills section rebuilt as a borderless editorial index** (`src/components/SkillsList.astro`). Replaced the crowded `.skill-card` grid (bordered cards, `min-height: 17rem`, pill `.tech-tag` chips, a ~200-char `summary`, and a redundant `evidence` "Applied: …" paragraph per card) with four full-width `.skill-row` rows separated by hairline `--color-border` rules. Each row = mono `01–04` marker + `h3` category heading (left), one-line description + inline technology list (right). Reason: eliminate visual clutter, density, uneven card heights, and pill noise while keeping the section scannable in seconds.
+
+- **Content restructured 5 → 4 records** (`src/content/skills/`). New categories in editorial order: `ai-ml.json` (AI & Machine Learning), `software-engineering.json`, `data-computing.json`, `computer-vision.json`. Deleted the old `data-ai`, `ai-retrieval`, `programming`, `tools-computing`, `web-backend` files. Reason: match the four-category brief; alphabetical sort produced the wrong reading order, so an explicit `order` field now drives sequence.
+
+- **Project-first item trim.** Every retained technology already appears in a project's frontmatter or the prior skill records — nothing invented. Dropped low-signal conceptual phrases that aren't technologies: `Data Structures & Algorithms`, `Object-Oriented Programming`, `Backend Development`, `API Integration`, `Uvicorn`, `Flask`, `Cross-Encoder Reranking`, `Local LLMs`, `Ollama`, plus `Kotlin`/`Android` (cut only for the 5–8 item cap; still visible on the project card). Categories hold 6–7 items each.
+
+### Refactored
+
+- **Schema** (`src/content.config.ts`): skills collection now `category`, `order` (optional number), `summary` (optional, one line), `items[]`. Removed the optional `evidence` field. Reason: `evidence` is no longer rendered; keeping it would let data drift from the UI. `order` is optional so a future record without it can't break the build (sorts last via `?? 99`).
+
+- **Styling** (`src/styles/components.css`, `global.css`). New `.skills-index` / `.skill-row*` rules use only existing tokens (`--color-border`, `--color-text-subtle`, `--space-*`), so the charcoal / off-white / coral identity is preserved in both themes with zero new colors. Removed every `.skill-card`, `.skills-grid`, `.skills-intro` rule and their scattered references in the forced-colors, print, pointer-coarse, and hover blocks. Dropped the `pointer: coarse` 44px target on skill text — inline items aren't interaction targets.
+
+### Fixed
+
+- **Technology names hyphenated mid-word on mobile** — Problem: `scikit-learn` and `GitHub` split as `scikit-`/`learn` and `Gi`/`tHub`. Root Cause: the global text-wrap rule (`global.css:33-35`) sets `overflow-wrap: anywhere` + `hyphens: auto` on `li`, which hyphenated at arbitrary points. Solution: on `.skill-row__list li` set `hyphens: none` + `overflow-wrap: break-word` — names stay intact, and `break-word` acts only as a last-resort guard so a long name like "TensorFlow Lite" can't overflow a 320px screen. Verified via computed style (`hyphens: none`, `word-break: normal`) at 320/390/1440.
+
+### Removed
+
+- `.skills-intro` paragraph from `src/pages/index.astro` (redundant with the `h2`) and its page-scoped style. Reason: buy whitespace; the heading already states the section's point.
+
+### Verification
+
+- `npm run build`: exit 0, 2 pages (`/`, `404.html`). Emitted HTML confirmed via regex — categories render in order `01 AI & Machine Learning` → `02 Software Engineering` → `03 Data & Scientific Computing` → `04 Computer Vision & Research`; descriptions and all item lists present; `Applied:` absent; zero `.tech-tag` inside the skills section; heading structure intact (1 `h1`, 6 `h2`, 10 `h3`).
+- Browser (Playwright/Chromium via `file://` — loopback HTTP was unreliable in this sandbox), 5 viewports (320/390/768/1024/1440) × light + dark: **all 12 combos — no skills-section element extends past the viewport**, rows stack (`stacked: true`) on mobile and split into two columns on desktop, list never overflows its container, and skill content is byte-identical across every viewport and theme (`distinct sets: 1`). Theme toggle verified (`light` → `dark`, aria-label updates).
+- Inlined-stylesheet grep: `.skill-card`/`.skills-grid`/`.skills-intro` = 0 occurrences; all new `.skill-row*` rules present; `hyphens: none` compiled in.
+- `npm run check`: **2 pre-existing errors, not from this change** — see Important Decisions below.
+
+### Important Decisions
+
+- **Rows over a 2×2 grid**: full-width rows with hairline separators reuse the site's existing editorial row language (the contact-link and education-list rules), so the section reads fast, stays ~one screen on desktop, and stacks cleanly on mobile without card heights ever being compared.
+- **`overflow-wrap: break-word` kept over `normal`**: an earlier `normal` attempt stopped all mid-word breaks but caused real horizontal overflow (page `scrollWidth` 397 vs viewport 320) because "TensorFlow Lite" became unbreakable. `break-word` resolves it without reintroducing the `hyphens: auto` butchery.
+- **The 2 `astro check` errors are parallel workstream drift, NOT from this task.** `src/components/ProjectCard.astro` was rewritten concurrently (new `featured?: boolean` prop, `subtitle` field, `project-card__meta` block), but `index.astro` still calls `<ProjectCard variant="diagram|metrics|preview">`. ProjectCard's `Props` no longer accepts `variant`, so lines 53/55 fail type-checking. `npm run build` still exits 0 (Astro tolerates it at render). Left untouched deliberately — reconciling ProjectCard with its callers is that parallel workstream's job, and silently editing it here would clobber in-progress work.
+- **Known 4px mobile overflow is also pre-existing/parallel, not mine**: `.project-card__meta` extends 4px past the viewport at 320/390 (`scrollWidth` 324/394). The skills section contributes zero out-of-bounds elements. Recorded, not fixed — out of scope for a skills-section task.
+- **Verified data only**: no technology, category, or description was invented; every string traces to existing project frontmatter or prior skill records.
 
 ### Added
 

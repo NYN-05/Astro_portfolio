@@ -267,6 +267,7 @@ export const profile = {
 ```markdown
 ---
 title: "Project Name"
+subtitle: "Optional secondary heading shown under the title"
 description: "One-line summary"
 problem: "What problem it solved"
 approach: "How you built it"
@@ -292,11 +293,13 @@ imageAlt: "Description for accessibility"
 ```json
 {
   "category": "Category Name",
-  "summary": "Your philosophy/approach",
-  "evidence": "Concrete example from your work",
+  "order": 1,
+  "summary": "One-line description of the category",
   "items": ["Tool1", "Tool2", "Tool3"]
 }
 ```
+
+`order` sets the editorial sequence on the homepage (optional; records without it sort last).
 
 ### 4. Site URL — `astro.config.mjs` and `public/robots.txt`
 

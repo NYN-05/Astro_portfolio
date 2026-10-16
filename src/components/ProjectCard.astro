@@ -5,21 +5,20 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   project: CollectionEntry<'projects'>;
-  variant?: 'diagram' | 'metrics' | 'preview' | 'featured' | 'secondary';
+  featured?: boolean;
 }
 
-const { project, variant } = Astro.props;
+const { project, featured = false } = Astro.props;
 const { data } = project;
-const isFeatured = variant === 'featured' || data.featured;
 const year = data.startDate?.slice(0, 4) ?? '—';
 const projectId = `project-${data.title.replace(/\s+/g, '-')}`;
 
-let cardVariant: 'diagram' | 'metrics' | 'preview' | 'featured' | 'secondary' = 'secondary';
-if (variant) {
-  cardVariant = variant;
-} else if (isFeatured) {
-  cardVariant = 'featured';
-}
+const STATUS_LABELS: Record<'completed' | 'in-progress' | 'archived', string> = {
+  completed: 'Completed project',
+  'in-progress': 'In progress',
+  archived: 'Archived',
+};
+const metaLabel = featured ? 'Featured project' : STATUS_LABELS[data.status];
 
 const imageSrc = data.image;
 const isLocalAsset = imageSrc && imageSrc.startsWith('./');
@@ -36,9 +35,13 @@ if (isLocalAsset) {
 const normalizedImageSrc = imageSrc?.startsWith('./') ? imageSrc.replace('./', '/images/') : imageSrc;
 const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
 ---
-<article class={`project-card project-card--${cardVariant}`} aria-labelledby={projectId}>
+<article class:list={['project-card', { 'project-card--featured': featured }]} aria-labelledby={projectId}>
+  <p class="project-card__meta">
+    <span class="project-card__meta-label">{metaLabel}</span>
+    <time class="project-card__meta-year" datetime={data.startDate ?? ''}>{year}</time>
+  </p>
   {normalizedImageSrc && (
-    <div class="project-card__image aspect-photo" aria-hidden="true">
+    <div class="project-card__image">
       {isLocalAsset && imageMetadata ? (
         <Image
           src={imageMetadata}
@@ -68,22 +71,22 @@ const imageSizes = data.imageSizes || '(max-width: 720px) 100vw, 50vw';
           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
         />
       )}
-      <div class="project-card__image-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:var(--color-bg-subtle); color:var(--color-text-muted); font-family:var(--font-family-mono); font-size:var(--font-size-xs);">
+      <div class="project-card__image-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:var(--card-chip-bg); color:var(--card-fg-secondary); font-family:var(--font-family-mono); font-size:var(--font-size-xs);">
         No preview available
       </div>
     </div>
   )}
   <div class="project-card__content grid-safe">
-    <header class="project-card__header">
+    <div class="project-card__heading">
       <h3 id={projectId} class="project-card__title">{data.title}</h3>
-      <time class="project-card__year" datetime={data.startDate ?? ''}>{year}</time>
-    </header>
-    <p class="project-card__description">{data.problem || data.description}</p>
-    <div class="project-card__tech" aria-label="Technologies">
-      {data.technologies.slice(0, isFeatured ? 6 : 4).map((technology: string) => <span class="tech-tag">{technology}</span>)}
+      {data.subtitle && <h4 class="project-card__subtitle">{data.subtitle}</h4>}
     </div>
+    <p class="project-card__description">{data.description || data.problem}</p>
+    <ul class="project-card__tech" aria-label="Technologies">
+      {data.technologies.slice(0, 6).map((technology: string) => <li class="tech-tag">{technology}</li>)}
+    </ul>
     <footer class="project-card__actions">
-      {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} source code on GitHub`}>View source</a>}
+      {data.repoUrl && <a href={data.repoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} source code on GitHub`}>View source code</a>}
       {data.demoUrl && <a href={data.demoUrl} class="project-card__link" target="_blank" rel="noopener noreferrer" aria-label={`View ${data.title} live demo`}>Live demo</a>}
     </footer>
   </div>

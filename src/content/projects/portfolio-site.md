@@ -1,5 +1,6 @@
 ---
 title: "VeriSight V1 – AI-Powered Image Authenticity Platform"
+subtitle: "CNN + Vision Transformer + OCR"
 description: "An AI-powered image verification platform combining CNN, Vision Transformer, and OCR models through a FastAPI REST backend."
 problem: "Image authenticity verification requires combining multiple computer vision and recognition techniques within a practical inference system."
 approach: "Developed a FastAPI-based REST backend integrating CNN, Vision Transformer, and OCR models, with asynchronous and parallel inference, caching, concurrency controls, benchmarking, latency measurement, and threshold calibration."

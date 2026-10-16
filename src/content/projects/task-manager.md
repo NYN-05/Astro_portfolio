@@ -1,6 +1,7 @@
 ---
-title: "Deepfake Detection Pipeline for KYC: rPPG + Hybrid Quantum-Classical ML"
-description: "An end-to-end low-resolution KYC video deepfake detection pipeline combining rPPG-based physiological analysis with hybrid quantum-classical machine learning inference."
+title: "Deepfake Detection for KYC"
+subtitle: "rPPG + Hybrid Quantum-Classical ML"
+description: "Detects deepfakes in low-resolution KYC videos by extracting rPPG physiological signals from video frames and classifying them with a hybrid quantum-classical ML model, capturing liveness evidence that appearance-based detection loses at low quality."
 problem: "Detecting deepfakes in low-resolution KYC videos requires reliable signals beyond conventional visual analysis, particularly when video quality limits the effectiveness of purely appearance-based detection."
 approach: "Built a pipeline incorporating frame processing, rPPG-based physiological analysis, POS/CHROM signal processing, physiological feature extraction, and hybrid quantum-classical ML inference, with the resulting inference workflow integrated into a React application."
 technologies:
@@ -25,5 +26,5 @@ featured: true
 startDate: "2024-01"
 endDate: ""
 image: "./deepfake-kyc.png"
-imageAlt: "Deepfake detection pipeline architecture showing rPPG analysis and quantum-classical ML components"
+imageAlt: "rPPG·QC Verifier dashboard showing a KYC video analysis with final verdict, estimated heart rate, rPPG signal quality, and the reconstructed pulse waveform"
 ---

@@ -1,0 +1,6 @@
+{
+  "category": "Data & Scientific Computing",
+  "order": 3,
+  "summary": "Numerical computing, testing, and tooling for reproducible analysis and experiments.",
+  "items": ["NumPy", "SciPy", "pytest", "Git", "Linux", "GitHub"]
+}

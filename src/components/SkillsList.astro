@@ -1,4 +1,8 @@
 ---
+/* eslint-disable jsx-a11y-x/no-noninteractive-tabindex -- The skill items are
+   deliberately focusable so keyboard users get the same highlight feedback as
+   pointer hover (requested focus state); they are intentional focus targets,
+   not inert decorations. */
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -7,23 +11,19 @@ interface Props {
 
 const { skills } = Astro.props;
 ---
-<div class="skills-grid">
+<div class="skills-index">
   {skills.map((skillGroup, index) => (
-    <article class="skill-card grid-safe">
-      <header class="skill-card__header">
-        <span class="skill-card__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-        <h3 class="skill-card__title">{skillGroup.data.category}</h3>
+    <article class="skill-row">
+      <header class="skill-row__head">
+        <span class="skill-row__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <h3 class="skill-row__title">{skillGroup.data.category}</h3>
       </header>
-      {skillGroup.data.summary && <p class="skill-card__summary">{skillGroup.data.summary}</p>}
-      <div class="skill-card__tech" aria-label="Technologies">
-        {skillGroup.data.items.map((item) => <span class="tech-tag">{item}</span>)}
+      <div class="skill-row__body">
+        {skillGroup.data.summary && <p class="skill-row__desc">{skillGroup.data.summary}</p>}
+        <ul class="skill-row__list">
+          {skillGroup.data.items.map((item) => <li tabindex="0">{item}</li>)}
+        </ul>
       </div>
-      {skillGroup.data.evidence && (
-        <p class="skill-card__evidence">
-          <span class="skill-card__evidence-prefix" aria-hidden="true">Applied: </span>
-          {skillGroup.data.evidence}
-        </p>
-      )}
     </article>
   ))}
 </div>

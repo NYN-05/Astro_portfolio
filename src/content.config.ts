@@ -6,6 +6,7 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
+    subtitle: z.string().optional(),
     description: z.string(),
     problem: z.string().optional(),
     approach: z.string().optional(),
@@ -43,8 +44,8 @@ const skills = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/skills' }),
   schema: z.object({
     category: z.string(),
+    order: z.number().optional(),
     summary: z.string().optional(),
-    evidence: z.string().optional(),
     items: z.array(z.string()),
   }),
 });

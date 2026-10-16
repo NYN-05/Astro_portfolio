@@ -9,7 +9,7 @@ import { profile, isExternal } from '../data/profile';
 
 const projects = (await getCollection('projects')).sort((a, b) => (b.data.startDate ?? '').localeCompare(a.data.startDate ?? ''));
 const education = (await getCollection('education')).sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
-const skills = (await getCollection('skills')).sort((a, b) => a.data.category.localeCompare(b.data.category));
+const skills = (await getCollection('skills')).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99) || a.data.category.localeCompare(b.data.category));
 const achievements = (await getCollection('achievements')).sort((a, b) => b.data.date.localeCompare(a.data.date));
 const featuredProject = projects.find((project) => project.data.featured) ?? projects[0];
 const supportingProjects = projects.filter((project) => project !== featuredProject).slice(0, 2);
@@ -50,9 +50,9 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
         <p>Each entry maps a problem to an implemented system and the verified outcome it produced.</p>
       </header>
       <div class="project-index" role="list" aria-label="Featured projects">
-        {featuredProject && <ProjectCard project={featuredProject} variant="diagram" />}
-        {supportingProjects.map((project, index) => (
-          <ProjectCard project={project} variant={index === 0 ? 'metrics' : 'preview'} />
+        {featuredProject && <ProjectCard project={featuredProject} featured />}
+        {supportingProjects.map((project) => (
+          <ProjectCard project={project} />
         ))}
         {projects.length === 0 && (
           <div class="empty-state" role="status" aria-live="polite">
@@ -86,7 +86,6 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
           <h2 id="skills-title">Tools matter when they deliver a result.</h2>
         </div>
       </header>
-      <p class="skills-intro">Capabilities are organized by what they make possible, with each record tied back to existing work.</p>
       {skills.length > 0 ? (
         <SkillsList skills={skills} />
       ) : (
@@ -310,12 +309,6 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
     }
     .about-link:hover {
       color: var(--color-accent);
-    }
-    .skills-intro {
-      max-width: 35ch;
-      margin: 0 0 var(--space-8);
-      color: var(--color-text-muted);
-      font-size: var(--font-size-md);
     }
     .records-grid {
       display: grid;

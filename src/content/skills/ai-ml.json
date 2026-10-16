@@ -1,0 +1,14 @@
+{
+  "category": "AI & Machine Learning",
+  "order": 1,
+  "summary": "Model development and retrieval systems for language, prediction, and generation tasks.",
+  "items": [
+    "PyTorch",
+    "scikit-learn",
+    "Transformers",
+    "RAG",
+    "Vector Search",
+    "BM25",
+    "PennyLane"
+  ]
+}
