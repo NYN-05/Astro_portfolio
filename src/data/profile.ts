@@ -15,11 +15,6 @@ export const profile = {
       href: "mailto:jnyn2005@gmail.com",
     },
     {
-      label: "Phone",
-      value: "+91 9632867181",
-      href: "tel:+919632867181",
-    },
-    {
       label: "GitHub",
       value: "github.com/NYN-05",
       href: "https://github.com/NYN-05",

@@ -55,6 +55,14 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-16 — Phone Contact Removed From Public Links
+
+### Changed
+
+- **Phone entry deleted from `src/data/profile.ts`** (the `label: "Phone"` record with its `tel:` href). The Get in touch section renders from `profile.contact` at build time, so the link and its numbered row disappear; the remaining rows (Email / GitHub / LinkedIn) renumber automatically. Reason: owner opted to stop publishing a personal phone number on the public site. Verification: the edit was in the tree for this session's full gate runs (`format` / `check` / `lint` / `build` all exit 0), and `dist/index.html` contains no `tel:` link. Note: git history retains earlier commits that contain the number — purging it from history would require a rewrite and force-push (deliberately not done).
+
+---
+
 ## 2026-10-16 — Hero Background Layer: Grids Removed, Swappable Image/Color/Video Config
 
 ### Removed
