@@ -55,6 +55,43 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-16 — Hero Background Plates: "Quiet Telemetry" Artwork (Light + Dark)
+
+### Added
+
+- **`public/images/hero-light.png` / `hero-dark.png`** (1920×1080, ~187 KB / ~158 KB) — two
+  generated plates for the hero background layer: 30 low-contrast resting signal channels, a
+  region-of-interest amplitude bloom, one continuous accent-colored pulse trace on a cleared
+  base-colored halo, three rationed pulse beats in the right margin, and instrument-style bezel
+  registration marks + sparse marginalia (IBM Plex Mono labels, Big Shoulders plate numeral).
+  The motif quietly references the site's rPPG / signal-reconstruction work; geometry is seeded
+  and reproducible (sharp + librsvg; fonts resolved from the skill's font directory via a
+  temporary fontconfig file — no system fonts installed, nothing added to `package.json`).
+- **`Docs/design-philosophy-quiet-telemetry.md`** — the design philosophy the plates express.
+
+### Changed
+
+- **`--hero-bg-image` defaults wired per theme** in `variables.css`: base `:root` → hero-light;
+  both dark blocks (`@media (prefers-color-scheme: dark)` and `[data-theme="dark"]`) →
+  hero-dark. **Supersedes** this log's earlier hero-background entry, which recorded
+  `none/transparent/0%` as pixel-parity with the old gradient: the default hero render is now
+  the artwork. The other knobs are unchanged and the theme gradient remains the
+  `--hero-bg-image: none` fallback.
+- Accessibility measured, not assumed (raw RGBA-pixel scan of both plates): worst-case art mark
+  inside the text-relevant zone vs the tightest body-text color (`--color-text-secondary`) is
+  **4.70:1 light / 4.76:1 dark** (AA ≥ 4.5). The pulse trace carries a base-colored halo so any
+  text above it keeps base-level contrast; the three coral beats sit at x ≥ 1340 — covered by
+  the opaque briefing card on desktop, cropped out on narrow viewports — so no hero text can
+  ever render over them. Known exception, documented honestly: in light mode the accent eyebrow
+  crossing a 1.15 px neutral channel hairline measures 3.71:1 at the crossing pixels only —
+  inherent to dark-accent-on-light palettes, with the base color dominating the effective
+  background. `--hero-bg-scrim` stays 0%.
+- Verified in this task: `format` / `check` / `lint` / `build` all exit 0; dist HTML carries
+  `--hero-bg-image: url(/images/hero-light.png)` once (base) and the dark URL twice (both dark
+  blocks); both PNGs present in `dist/images/` at 187 KB / 158 KB.
+
+---
+
 ## 2026-10-16 — Phone Contact Removed From Public Links
 
 ### Changed
