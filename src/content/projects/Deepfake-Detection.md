@@ -20,11 +20,11 @@ contributions:
   - "Developed and evaluated the hybrid quantum-classical inference component"
   - "Integrated inference into a React-based application"
 results: "Improved the VQC from majority-class prediction to genuine/FAKE-class detection, achieving 0.702 specificity."
-repoUrl: "https://github.com/NYN-05/Major-project"
+repoUrl: "https://github.com/NYN-05/Major_project.git"
 status: "in-progress"
 featured: true
 startDate: "2024-01"
 endDate: ""
-image: "./deepfake-kyc.png"
+image: "./Deepfake-Detection.png"
 imageAlt: "rPPG·QC Verifier dashboard showing a KYC video analysis with final verdict, estimated heart rate, rPPG signal quality, and the reconstructed pulse waveform"
 ---

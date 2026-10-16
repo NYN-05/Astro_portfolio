@@ -26,8 +26,8 @@ let imageMetadata: ImageMetadata | null = null;
 
 if (isLocalAsset) {
   const imagePath = imageSrc.replace('./', '');
-  if (imagePath === 'deepfake-kyc.png') {
-    const deepfakeImage = await import('../content/projects/images/deepfake-kyc.png');
+  if (imagePath === 'Deepfake-Detection.png') {
+    const deepfakeImage = await import('../content/projects/images/Deepfake-Detection.png');
     imageMetadata = deepfakeImage.default;
   }
 }
