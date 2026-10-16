@@ -53,12 +53,6 @@
   transform: translateX(2px);
 }
 
-.signal-grid {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0 32V0H32' fill='none' stroke='currentColor' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E");
-  background-size: 2rem 2rem;
-  color: var(--color-border);
-}
-
 .project-index {
   display: grid;
   gap: var(--space-12);
@@ -761,11 +755,6 @@
   .project-card__actions,
   .recognition-link,
   .btn {
-    display: none !important;
-  }
-  .hero::after,
-  .signal-grid::before,
-  .signal-grid::after {
     display: none !important;
   }
   body {

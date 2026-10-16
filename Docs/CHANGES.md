@@ -55,6 +55,104 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 
 ---
 
+## 2026-10-16 — Hero Background Layer: Grids Removed, Swappable Image/Color/Video Config
+
+### Removed
+
+- **Grid pattern stripped from the hero** (`src/pages/index.astro`): the 32px SVG data-URI
+  `background-image` and `background-size: 2rem 2rem, auto` deleted from `.hero`. Reason: brief
+  required the decorative grid gone in both light and dark modes; it was a single rule serving
+  both themes (no dark duplicate), so removal is total. `.hero` keeps its dimensions, border,
+  `background-color`, and `color`, and gains `overflow: hidden` so background media crops to the
+  hero box.
+- **404 page grid stripped** (`src/pages/404.astro`, `src/styles/components.css`): the
+  `signal-grid` class removed from the error section and its `.signal-grid` rule (the same 32px
+  SVG grid) deleted. Reason: user explicitly opted to remove this second pattern as well. Text
+  colors verified unaffected — every 404 text element sets its own color (kicker
+  `--color-accent` in `global.css`, h1 `--color-text` from the global heading rule, p muted,
+  button its own), so the deleted rule's `color: var(--color-border)` only ever fed the SVG's
+  `stroke='currentColor'`.
+- **Dead print-guard rule** (`src/styles/components.css`, `@media print`): deleted
+  `.hero::after, .signal-grid::before, .signal-grid::after { display: none !important; }`.
+  Reason: grep proved none of those three pseudo-elements are defined anywhere — stale leftovers
+  of the old grid design, part of the brief's "remove pseudo-elements/overlays" scope.
+
+### Added
+
+- **Configurable background layer behind all hero content** (`src/pages/index.astro`): new
+  `<div class="hero-bg" aria-hidden="true">` as first child of `.hero`, with `.hero-bg` CSS:
+  `position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden` and a
+  three-layer `background-image` stack — custom image → custom solid color (via
+  `linear-gradient(c, c)`) → the existing theme gradient fallback — with
+  `background-size: cover, auto, auto` + centered position for distortion-free responsive
+  cropping. `.hero-grid` gains `position:relative; z-index:1` so content deterministically
+  paints above the layer (no negative-z-index paint-order gotchas). Reason: brief requirement
+  2/5 — a clean, swappable layer that never touches layout, dimensions, or typography.
+- **Readability veil** rendered as `.hero-bg::after` (no extra element):
+  `color-mix(in srgb, var(--color-bg) var(--hero-bg-scrim), transparent)` — follows `--color-bg`,
+  so it is theme-appropriate by construction (warm off-white veil in light, near-black in dark)
+  and flips atomically with `data-theme` via custom-property inheritance (no flash: the same
+  pre-paint mechanism the theme itself uses).
+- **Config knobs in `src/styles/variables.css`** (base `:root`, beside the existing
+  `--hero-gradient-*` tokens, with usage documentation): `--hero-bg-image: none`,
+  `--hero-bg-color: transparent`, `--hero-bg-scrim: 0%`. Reason: user chose a CSS custom-property
+  mechanism over a frontmatter const — swapping the background asset later is a one-line edit in
+  the theme's source of truth and never touches markup or component structure. The comment
+  documents the public/images path, cover/crop guidance, GIF/animated-WebP loop support, and how
+  to redeclare a knob inside the dark blocks for a theme-specific asset.
+- **Looping-video path**: commented `<video data-hero-video src="/hero.mp4" … autoplay muted
+loop playsinline>` snippet inside `.hero-bg`, with `.hero-bg video { object-fit:cover … }`
+  rules already shipping. Reason: CSS cannot set a video source (it must be an HTML attribute),
+  so the markup snippet is the honest mechanism; enable = drop file in `public/` + uncomment.
+- **Reduced-motion guard** (`<script is:inline>` in `index.astro`, dormant unless the snippet is
+  uncommented): under `prefers-reduced-motion: reduce` it removes `autoplay`, pauses, and
+  re-pauses on any `play` event. Reason: guards the load-race where the spec's metadata-time
+  autoplay attempt would otherwise override an early `pause()`; inline per house rule (no bundled
+  output), page fully functional with JS disabled.
+
+### Fixed
+
+- **Background layer div was missing from the first markup pass.** Problem: the initial edit
+  inserted only the config comment inside `.hero` without the `<div class="hero-bg">` element,
+  so every `.hero-bg` rule matched nothing — inert layer, and the hero would render flat
+  `background-color` instead of the gradient (visual regression vs. the promised parity). Root
+  cause: the verification regex (`>\s*<!-- Background layer`) matched the comment text that
+  merely _mentioned_ `.hero-bg` and reported success — a false positive. Solution: added the
+  real element wrapping the video snippet. Verification: re-ran all gates and re-checked dist
+  with element-level assertions — `<div class="hero-bg" … data-astro-cid…>` exists, is the first
+  child of `section.hero`, and the scoped `.hero-bg[data-astro-cid-…]` rules match it (all true).
+
+### Important Decisions
+
+- **Default knob values give pixel parity.** `none`/`transparent`/`0%` resolve the layer to
+  exactly the previous theme gradient with a transparent veil — the original background minus
+  the grid. No text color was touched anywhere, so the AA contrast measurements recorded in the
+  earlier card entries still hold for the default state.
+- **Scoping constraint discovered:** page `<style>` compiles `.hero-bg` rules to
+  `.hero-bg[data-astro-cid-lcdefpme]`, so the layer must be template markup (it is, and Astro
+  stamps the attribute automatically). The CSS minifier rewrites `::after` → `:after`
+  (equivalent selector) — noted so future dist greps don't misread it as missing.
+- Knobs are declared once in base `:root` and inherit through both theme-selector paths
+  (media-query dark and `[data-theme="dark"]`), which neither overrides.
+
+### Verification
+
+- `npm run format`: clean · `npm run check`: 0 errors, 0 warnings (1 pre-existing BaseLayout
+  hint) · `npm run lint`: exit 0 · `npm run build`: exit 0, 2 pages — run twice (once before,
+  once after the missing-div fix).
+- `dist/index.html`: layer element present with scope attribute as first child of `.hero`;
+  config comment + video snippet nested inside it; knobs emitted in `:root`
+  (`--hero-bg-image:none; --hero-bg-color:transparent; --hero-bg-scrim:0%`); scoped `.hero-bg`
+  rules, veil `:after` rule, `background-size:cover,auto,auto` stack, and `z-index:0`/`z-index:1`
+  stacking all present; hero h1, both CTAs, and the briefing card intact; reduced-motion script
+  emitted.
+- `dist/404.html`: `<section class="error-section" …>` clean (only the scope attribute added);
+  zero `signal-grid` matches.
+- Both pages: zero `width='32' height='32'` grid data-URI matches — no grid pattern remains in
+  the shipped CSS or HTML.
+
+---
+
 ## 2026-10-16 — Skills Hover Chip Fixed: Coral Background No Longer Overlaps Adjacent Tabs
 
 ### Fixed
@@ -73,6 +171,28 @@ Entry format: `## YYYY-MM-DD — [Short Change Description]`
 ### Important Decisions
 
 - **Amends the same-day "Skill Items: Coral Hover/Focus Interaction" entry**: the highlight technique and its zero-layout-shift guarantee stand unchanged; only the storage of the divider gap moved — from inside the painted box (`::after` margin) to `margin-inline-end`, which is what makes the chip strictly self-contained.
+
+---
+
+## 2026-10-16 — Content Files Renamed: Project Markdown and Featured Screenshot
+
+### Changed
+
+- **Project collection files renamed to match their projects** (`src/content/projects/`): `task-manager.md` → `Deepfake-Detection.md`, `portfolio-site.md` → `VeriSight.md`, `data-pipeline.md` → `BIRAC.md`. Reason: the old names were misleading placeholders (`task-manager.md` held the Deepfake KYC project). Content and frontmatter unchanged.
+
+- **Featured screenshot renamed to match** (`src/content/projects/images/`): `deepfake-kyc.png` → `Deepfake-Detection.png`. Two references updated: the `image:` path in `Deepfake-Detection.md` frontmatter, and the hardcoded asset import branch in `src/components/ProjectCard.astro` (`imagePath === 'Deepfake-Detection.png'` + the `await import(...)` path). Reason: keep asset naming consistent with its collection file.
+
+### Important Decisions
+
+- **Astro entry IDs changed with the filenames** (`task-manager` → `Deepfake-Detection`, etc.). Verified nothing references the old IDs: the collection uses a `glob()` loader (filename-agnostic), `index.astro` loads via `getCollection('projects')` sorted by `startDate`, and `ProjectCard.astro` derives its anchor from `data.title`, not the entry ID. No code changes beyond the image import were needed.
+- **Historical `Docs/CHANGES.md` entries still cite the old filenames** (e.g., "task-manager.md"). Left as-written per the append-only rule; they were accurate when recorded.
+- Both `.md` renames were untracked-delete/untracked-add in the working tree; the `.png` rename was staged with `git mv` so Git records it as a rename. `git add -A src/content/projects/` at commit time will let Git detect the markdown renames too.
+
+### Verification
+
+- `npm run check`: 0 errors, 0 warnings (1 pre-existing BaseLayout hint). `npm run lint`: exit 0. `npm run format`: clean. `npm run build`: exit 0, 2 pages.
+- `dist/index.html`: featured card renders with the new asset (`/_astro/Deepfake-Detection.*.webp`, full 400/800/1200w srcset, alt intact); all three cards present.
+- Repo-wide grep for `deepfake-kyc`: 0 matches — no stale references.
 
 ---
 

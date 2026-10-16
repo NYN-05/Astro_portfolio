@@ -16,6 +16,15 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
 ---
 <MainLayout title="Home" description="Professional portfolio showcasing projects, skills, and education.">
   <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true">
+      <!-- Background layer: styled by the .hero-bg rules below and configured
+           with the CSS knobs in variables.css (--hero-bg-image /
+           --hero-bg-color / --hero-bg-scrim). LOOPING VIDEO (optional):
+           drop hero.mp4 and hero-poster.jpg in public/, then uncomment
+           the line below.
+      <video data-hero-video src="/hero.mp4" poster="/hero-poster.jpg" autoplay muted loop playsinline preload="metadata"></video>
+      -->
+    </div>
     <div class="container container-wide hero-grid">
       <div class="hero-copy">
         <p class="hero-status"><span aria-hidden="true" aria-live="polite"></span> Available for selected opportunities</p>
@@ -159,14 +168,53 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       min-height: min(47rem, calc(100dvh - 4.5rem));
       border-bottom: 1px solid var(--color-border);
       position: relative;
+      overflow: hidden;
       background-color: var(--color-bg);
-      background-image:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M0 32V0H32' fill='none' stroke='%23808080' stroke-width='0.5' opacity='0.15'/%3E%3C/svg%3E"),
-        linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
-      background-size: 2rem 2rem, auto;
       color: var(--color-text);
     }
+    /* Background layer behind all hero content, configured by the knobs in
+       variables.css: --hero-bg-image (custom image), --hero-bg-color (flat
+       color), --hero-bg-scrim (readability veil, rendered as ::after).
+       Defaults resolve to the theme gradient — the original background
+       minus the removed grid. */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      background-image:
+        var(--hero-bg-image, none),
+        linear-gradient(
+          var(--hero-bg-color, transparent),
+          var(--hero-bg-color, transparent)
+        ),
+        linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 100%);
+      background-size: cover, auto, auto;
+      background-position: center, center, center;
+      background-repeat: no-repeat;
+    }
+    .hero-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: color-mix(
+        in srgb,
+        var(--color-bg) var(--hero-bg-scrim),
+        transparent
+      );
+    }
+    .hero-bg video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
     .hero-grid {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr);
       gap: clamp(var(--space-10), 8vw, var(--space-20));
@@ -401,4 +449,15 @@ const supportingProjects = projects.filter((project) => project !== featuredProj
       }
     }
   </style>
+
+  <script is:inline>
+    // Pause an optional hero background video for reduced-motion users.
+    document.querySelectorAll("[data-hero-video]").forEach((video) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        video.removeAttribute("autoplay");
+        video.pause();
+        video.addEventListener("play", () => video.pause());
+      }
+    });
+  </script>
 </MainLayout>

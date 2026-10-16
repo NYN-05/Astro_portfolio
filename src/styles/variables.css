@@ -126,6 +126,27 @@
   /* Hero gradient — subtle, neutral */
   --hero-gradient-start: #fafaf9;
   --hero-gradient-end: #f5f5f3;
+
+  /* Hero background — the hero renders a dedicated layer (.hero-bg in
+     index.astro) behind all content. Defaults below render the theme
+     gradient above: a solid, theme-aware fallback needing no action.
+       Custom image: --hero-bg-image: url("/images/hero-bg.jpg");
+         (drop the file in public/images/; it is sized with cover + center
+         crop, so use artwork that survives cropping on wide screens; a
+         looping GIF/animated WebP also works here)
+       Flat color:   --hero-bg-color: #121212;
+       Readability veil over image/color:
+         --hero-bg-scrim: 62%;
+         (0% default — raise it for busy backgrounds so text keeps AA
+         contrast in both themes)
+     Looping VIDEO cannot be set from CSS: drop hero.mp4 (+ hero-poster.jpg)
+     in public/ and uncomment the <video> snippet inside .hero-bg in
+     index.astro; it auto-pauses for prefers-reduced-motion users.
+     For a background specific to one theme, redeclare a knob inside the
+     dark-mode blocks below — knobs inherit everywhere unless overridden. */
+  --hero-bg-image: none;
+  --hero-bg-color: transparent;
+  --hero-bg-scrim: 0%;
 }
 
 /* DARK MODE — Monochrome & Signal Red */
